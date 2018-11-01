@@ -9,8 +9,8 @@ import java.util.List;
 @Repository
 @Mapper
 public interface studentMapper {
-    @Select("SELECT * FROM student WHERE id = #{id}")
-    student getStudentById(String id);
+    @Select("SELECT * FROM student WHERE studentId = #{studentId}")
+    student getStudentById(String studentId);
 
     @Select("SELECT * FROM student WHERE studentEmail = #{studentEmail}")
     student getStudentByEmail(String studentEmail);

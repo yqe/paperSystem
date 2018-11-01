@@ -9,12 +9,16 @@ import java.util.List;
 @Repository
 @Mapper
 public interface modificationMapper {
-    @Select("SELECT * FROM modification WHERE studentId = #{studentId} ")
+    @Select("SELECT * FROM modification WHERE studentId = #{studentId} ORDER BY date DESC")
     List<modification> getAllModificationByStudentId(String studentId);
 
-    @Insert("INSERT INTO modification (studentId, description, date) VALUES (#{studentId}, #{description}, #{date})")
-    Boolean insert(@Param("studentId") String studentId, @Param("description")String description, @Param("date")String date);
+    @Insert("INSERT INTO modification (studentId, summary, description, date) VALUES (#{studentId}, #{summary}, #{description}, #{date})")
+    Boolean insert(@Param("studentId") String studentId, @Param("summary")String summary, @Param("description")String description, @Param("date")String date);
 
-    @Update("UPDATE modification SET description = #{description} WHERE id = #{id} ")
-    Boolean update(@Param("id") int id, @Param("description")String description);
+//    @Update("UPDATE modification SET description = #{description} WHERE id = #{id} ")
+//    Boolean update(@Param("id") int id, @Param("description")String description);
+
+    @Delete("DELETE FROM modification WHERE id =#{id}")
+    Boolean delete(int id);
+
 }

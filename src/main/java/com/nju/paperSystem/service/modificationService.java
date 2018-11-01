@@ -16,11 +16,15 @@ public class modificationService {
         return modificationMapper.getAllModificationByStudentId(studentId);
     }
 
-    public boolean update(modification modification){
-        return modificationMapper.update(modification.getId(), modification.getDescription());
-    }
+//    public boolean update(modification modification){
+//        return modificationMapper.update(modification.getId(), modification.getDescription());
+//    }
 
     public boolean insert(modification modification){
-        return modificationMapper.insert(modification.getStudentId(), modification.getDescription(), modification.getDate());
+        return modificationMapper.insert(modification.getStudentId(), modification.getSummary(), modification.getDescription(), modification.getDate());
+    }
+
+    public boolean delete(int id){
+        return modificationMapper.delete(id);
     }
 }

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>论文提交系统</title>
+
+    <!-- BOOTSTRAP STYLES-->
+    <link href="/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONTAWESOME STYLES-->
+    <link href="/css/font-awesome.css" rel="stylesheet" />
+    <!--CUSTOM BASIC STYLES-->
+    <link href="/css/basic.css" rel="stylesheet" />
+    <!--CUSTOM MAIN STYLES-->
+    <link href="/css/custom.css" rel="stylesheet" />
+    <style type="text/css">
+    /*.form-horizontal .form-group{*/
+        /*width: 70%;*/
+    /*}*/
+    .form-group .col-sm-10{
+        width: 35%;
+    }
+    #main-menu span{
+        color: #aaaaaa;
+    }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <li>
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-8" style="margin-top: 3%;">
+                            <span>学号：[[${student.studentId}]]</span>
+                            <br/>
+                            <span>姓名：[[${student.studentName}]]</span>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <a th:href="@{/paperUpload}"><i class="fa fa-dashboard"></i>论文管理</a>
+                </li>
+                <li>
+                    <a class="active-menu" th:href="@{/studentInfo}"><i class="fa fa-dashboard "></i>个人信息管理</a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="btn btn-danger" th:href="@{/index}"
+                       style="float: right">退出</a>
+                    <h1 class="page-head-line">个人信息</h1>
+                    <form class="form-horizontal" th:action="@{/studentInfoUpdate}"  method="post">
+                        <div style="margin-left: 5%" class="row">
+                            <div class="form-group" >
+                                <label for="studentId" class="col-sm-2 control-label">学号:</label>
+                                <div class="col-sm-10" style="margin-top: 8px;">
+                                    <input class="form-control"  type="hidden" id="studentId" name="studentId"  th:value="${student.studentId}"/>
+                                    <span >[[${student.studentId}]]</span>
+                                </div>
+                            </div>
+                            <div class="form-group" >
+                                <label for="studentName" class="col-sm-2 control-label">姓名:</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control"  type="text" id="studentName" name="studentName"  th:value="${student.studentName}"/>
+                                </div>
+                            </div>
+                            <div class="form-group" >
+                                <label for="studentEmail" class="col-sm-2 control-label">邮箱:</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control"  type="text" id="studentEmail" name="studentEmail" th:value="${student.studentEmail}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone" class="col-sm-2 control-label">手机:</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control"  type="text" id="phone" name="phone" th:value="${student.phone}" />
+                                </div>
+                            </div>
+                            <div class="form-group" >
+                                <label for="teacherName" class="col-sm-2 control-label">导师姓名:</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control"  type="text" id="teacherName" name="teacherName" th:value="${student.teacherName}"/>
+                                </div>
+                            </div>
+                            <div class="form-group" >
+                                <label for="teacherEmail" class="col-sm-2 control-label">导师邮箱:</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control"  type="text" id="teacherEmail" name="teacherEmail" th:value="${student.teacherEmail}"/>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-info" style="margin-left: 17%">修改</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /. PAGE WRAPPER  -->
+</div>
+<!-- /. WRAPPER  -->
+<div id="footer-sec">
+    &copy; 论文提交系统
+</div>
+<!-- /. FOOTER  -->
+<!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+<!-- JQUERY SCRIPTS -->
+<script src="/js/jquery-1.10.2.js"></script>
+<!-- BOOTSTRAP SCRIPTS -->
+<script src="/js/bootstrap.js"></script>
+<!-- METISMENU SCRIPTS -->
+<script src="/js/jquery.metisMenu.js"></script>
+<!-- CUSTOM SCRIPTS -->
+<script src="/js/custom.js"></script>
+<!--<script src="/js/easyui.js"></script>-->
+<script src="/js/jquery-latest.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>论文提交系统</title>
+
+    <!-- BOOTSTRAP STYLES-->
+    <link href="/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONTAWESOME STYLES-->
+    <link href="/css/font-awesome.css" rel="stylesheet" />
+    <!--CUSTOM BASIC STYLES-->
+    <link href="/css/basic.css" rel="stylesheet" />
+    <!-- PAGE LEVEL STYLES -->
+    <link href="/css/bootstrap-fileupload.min.css" rel="stylesheet" />
+    <!--CUSTOM MAIN STYLES-->
+    <link href="/css/custom.css" rel="stylesheet" />
+
+    <!--timeline css-->
+    <link href="/css/timeline.css" rel="stylesheet" />
+
+    <link href="/css/timelinebody.css" rel="stylesheet" />
+
+    <style type="text/css">
+        .form-horizontal{
+            margin-left: 7%;
+        }
+        .form-horizontal .row{
+            margin-left: 5%;
+            width: 40%;
+        }
+        .form-horizontal button{
+            margin-right: 20px;
+        }
+        #main-menu span{
+            color: #aaaaaa;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <li>
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-8" style="margin-top: 3%;">
+                            <span>学号：[[${student.studentId}]]</span>
+                            <br/>
+                            <span>姓名：[[${student.studentName}]]</span>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <a class="active-menu" th:href="@{/paperUpload}"><i class="fa fa-dashboard "></i>论文管理</a>
+                </li>
+                <li>
+                    <a th:href="@{/studentInfo}"><i class="fa fa-dashboard "></i>个人信息管理</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="btn btn-danger" th:href="@{/index}"
+                       style="float: right">退出</a>
+                    <h1 class="page-head-line">论文提交</h1>
+                    <form class="form-horizontal" th:action="@{/paperModification}" ENCTYPE="multipart/form-data" method="post">
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="file">选择文件</label>
+                                    <div id="file" class="fileupload fileupload-new" data-provides="fileupload">
+                                                            <span class="btn btn-file btn-default">
+                                                                <span class="fileupload-new">选择</span>
+                                                                <span class="fileupload-exists">更改</span>
+                                                                <input type="file" name="file">
+                                                             </span>
+                                        <span class="fileupload-preview"></span>
+                                        <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="summary">修改概要</label>
+                                <input type="text" class="form-control" name="summary" id="summary" />
+                            </div>
+                            <div class="form-group">
+                                <label for="description">具体说明</label>
+                                <textarea class="form-control" rows="3" name="description" id="description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-default">上传</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-12">
+                    <h1 class="page-head-line">论文修改历史</h1>
+                    <div class="main-timeline">
+                        <div class="timeline" th:each="modification : ${modificationList}">
+                            <div class="timeline-content">
+								<span class="date">
+                                    <span>[[${modification.date}]]</span>
+									<!--<span class="month">Apr</span>-->
+									<!--<span class="year">2017</span>-->
+								</span>
+                                <h2 class="title">[[${modification.summary}]]</h2>
+                                <p class="description">[[${modification.description}]]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /. PAGE WRAPPER  -->
+</div>
+<!-- /. WRAPPER  -->
+<div id="footer-sec">
+    &copy; 论文提交系统
+</div>
+<!-- /. FOOTER  -->
+<!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+<!-- JQUERY SCRIPTS -->
+<script src="/js/jquery-1.10.2.js"></script>
+<!-- BOOTSTRAP SCRIPTS -->
+<script src="/js/bootstrap.js"></script>
+<!-- PAGE LEVEL SCRIPTS -->
+<script src="/js/bootstrap-fileupload.js"></script>
+<!-- METISMENU SCRIPTS -->
+<script src="/js/jquery.metisMenu.js"></script>
+<!-- CUSTOM SCRIPTS -->
+<script src="/js/custom.js"></script>
+<!--<script src="/js/easyui.js"></script>-->
+<script src="/js/jquery-latest.js"></script>
+
+
+</body>
+</html>

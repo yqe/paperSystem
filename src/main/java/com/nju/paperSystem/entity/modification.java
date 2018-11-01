@@ -3,6 +3,7 @@ package com.nju.paperSystem.entity;
 public class modification {
     private int id;
     private String studentId;
+    private String summary;
     private String description;
     private String date;
 
@@ -19,6 +20,14 @@ public class modification {
 
     public void setStudentId(String studentId) {
         this.studentId = studentId;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public String getDescription() {

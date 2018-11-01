@@ -5,8 +5,10 @@ public class student {
     private String studentName;
     private String studentEmail;
     private String password;
+    private String phone;
     private String teacherName;
     private String teacherEmail;
+    private String fileName;
 
     public student() {
     }
@@ -43,6 +45,14 @@ public class student {
         this.password = password;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getTeacherName() {
         return teacherName;
     }
@@ -57,5 +67,13 @@ public class student {
 
     public void setTeacherEmail(String teacherEmail) {
         this.teacherEmail = teacherEmail;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

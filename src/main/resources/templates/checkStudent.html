@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>论文提交系统</title>
+
+    <!-- BOOTSTRAP STYLES-->
+    <link href="/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONTAWESOME STYLES-->
+    <link href="/css/font-awesome.css" rel="stylesheet" />
+    <!--CUSTOM BASIC STYLES-->
+    <link href="/css/basic.css" rel="stylesheet" />
+    <!--CUSTOM MAIN STYLES-->
+    <link href="/css/custom.css" rel="stylesheet" />
+
+    <!--<link href="/css/easyui.css" rel="stylesheet" />-->
+
+    <!--<link href="/css/icon.css" rel="stylesheet" />-->
+
+    <link rel="stylesheet" href="jquery.tablesorter.pager.css" type="text/css" />
+    <!-- GOOGLE FONTS-->
+    <!--<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />-->
+    <style type="text/css">
+        .form-group .col-sm-10{
+            width: 35%;
+        }
+        #main-menu span{
+            color: #aaaaaa;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <li>
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-8" style="margin-top: 3%;">
+                            <span>工号：[[${teacher.id}]]</span>
+                            <br/>
+                            <span>姓名：[[${teacher.name}]]</span>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <a class="active-menu" th:href="@{/checkStudent}"><i class="fa fa-dashboard "></i>学生列表</a>
+                </li>
+                <!--<li>-->
+                    <!--<a ><i class="fa fa-dashboard "></i>个人信息管理</a>-->
+                <!--</li>-->
+            </ul>
+        </div>
+
+    </nav>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="btn btn-danger" th:href="@{/index}"
+                       style="float: right">退出</a>
+                    <h1 class="page-head-line">学生列表</h1>
+                    <div class="row">
+                        <div style="margin: 5%;">
+                            <!--    Striped Rows Table  -->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    学生信息
+                                </div>
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table id="myTable" class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>学号</th>
+                                                <th>姓名</th>
+                                                <th>联系电话</th>
+                                                <th>邮箱账号</th>
+                                                <th>论文</th>
+                                                <th>修改历史</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody >
+                                            <tr th:each="student:${studentList}">
+                                                <td th:text="${student.studentId}"></td>
+                                                <td th:text="${student.studentName}"></td>
+                                                <td th:text="${student.phone}"></td>
+                                                <td th:text="${student.studentEmail}"></td>
+                                                <td>
+                                                    <a th:if="${student.fileName}!=null" class="btn btn-info" th:href="'/paperDownload/'+${student.studentId}">
+                                                        下载
+                                                    </a>
+                                                    <a th:if="${student.fileName}==null"  class="btn btn-info" disabled="disabled">
+                                                        下载
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-success" th:href="'/paperInfo/'+${student.studentId}">
+                                                       查看
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--  End  Striped Rows Table  -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /. PAGE WRAPPER  -->
+</div>
+<!-- /. WRAPPER  -->
+<div id="footer-sec">
+    &copy;论文提交系统
+</div>
+<!-- /. FOOTER  -->
+<!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+<!-- JQUERY SCRIPTS -->
+<script src="/js/jquery-1.10.2.js"></script>
+<!-- BOOTSTRAP SCRIPTS -->
+<script src="/js/bootstrap.js"></script>
+<!-- METISMENU SCRIPTS -->
+<script src="/js/jquery.metisMenu.js"></script>
+<!-- CUSTOM SCRIPTS -->
+<script src="/js/custom.js"></script>
+<!--<script src="/js/easyui.js"></script>-->
+<script src="/js/jquery-latest.js"></script>
+
+
+</body>
+</html>

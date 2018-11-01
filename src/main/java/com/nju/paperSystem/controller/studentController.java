@@ -1,24 +1,134 @@
 package com.nju.paperSystem.controller;
 
+import com.nju.paperSystem.entity.modification;
 import com.nju.paperSystem.entity.student;
+import com.nju.paperSystem.service.mailService;
 import com.nju.paperSystem.service.modificationService;
 import com.nju.paperSystem.service.studentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
-@RestController
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+@Controller
 public class studentController {
     @Autowired
     studentService studentService;
     @Autowired
     modificationService modificationService;
+    @Autowired
+    mailService mailService;
+
+    @RequestMapping(value="/",method = RequestMethod.GET)
+    public String index(){
+        return "login";
+    }
 
     @RequestMapping(value="/index",method = RequestMethod.GET)
-    public student studentinfo(){
-        student student = studentService.getStudentByEmail("MF1832223@smail.nju.edu.cn");
-        return student;
+    public String login(){
+        return "login";
     }
+
+    @RequestMapping(value="/studentRegister",method = RequestMethod.GET)
+    public String studentRegister(){
+        return "studentRegister";
+    }
+
+    @RequestMapping(value="/studentLogin",method = RequestMethod.POST)
+    public String studentLogin(Model model, HttpServletRequest request){
+        String email = request.getParameter("studentEmail");
+        String password = request.getParameter("studentPassword");
+        if(studentService.login(email, password)){
+            HttpSession session = request.getSession();
+            session.setAttribute("studentId", studentService.getStudentByEmail(email).getStudentId());
+            return "redirect:paperUpload";
+        }
+        else{
+            model.addAttribute("error", "密码错误，请重新登录！");
+            return "login";
+        }
+    }
+
+    @RequestMapping(value="/addStudent",method = RequestMethod.POST)
+    public String addStudent(Model model,HttpServletRequest request){
+        String studentId = request.getParameter("studentId");
+        if(studentService.getStudentById(studentId) != null){
+            System.out.println(studentId);
+            model.addAttribute("error","该学号已存在，请重新注册！");
+            return "studentRegister";
+        }
+        student student = new student();
+        student.setStudentId(studentId);
+        student.setStudentEmail(request.getParameter("email"));
+        student.setStudentName(request.getParameter("name"));
+        student.setPhone(request.getParameter("phone"));
+        student.setPassword(request.getParameter("password"));
+        student.setTeacherName(request.getParameter("teacherName"));
+        student.setTeacherEmail(request.getParameter("teacherEmail"));
+        studentService.insert(student);
+        return "redirect:index";
+    }
+
+    @RequestMapping(value = "/studentInfo",method = RequestMethod.GET)
+    public String studentInfo(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        student student=studentService.getStudentById((session.getAttribute("studentId")).toString());
+        model.addAttribute("student",student);
+        return "studentInfoUpdate";
+    }
+
+    @RequestMapping(value = "/studentInfoUpdate",method = RequestMethod.POST)
+    public ModelAndView studentInfoUpdate(HttpServletRequest request) {
+        String studentId = request.getParameter("studentId");
+        student student = studentService.getStudentById(studentId);
+        student.setStudentEmail(request.getParameter("studentEmail"));
+        student.setPhone(request.getParameter("phone"));
+        student.setStudentName(request.getParameter("studentName"));
+        student.setTeacherName(request.getParameter("teacherName"));
+        student.setTeacherEmail(request.getParameter("teacherEmail"));
+        studentService.update(student);
+        return new ModelAndView("redirect:/studentInfo");
+    }
+
+    @RequestMapping(value = "/paperUpload",method = RequestMethod.GET)
+    public String paperUpload(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        student student = studentService.getStudentById((session.getAttribute("studentId")).toString());
+        List<modification> modificationList = modificationService.getAllModificationByStudentId(student.getStudentId());
+        model.addAttribute("student",student);
+        model.addAttribute("modificationList",modificationList);
+        return "paperUpload";
+    }
+
+    @RequestMapping(value = "/paperModification",method = RequestMethod.POST)
+    public String paperModification(@RequestParam("file") MultipartFile file,Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        student student=studentService.getStudentById((session.getAttribute("studentId")).toString());
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        Date date=new Date();
+        modification modification =new modification();
+        modification.setStudentId(student.getStudentId());
+        modification.setSummary(request.getParameter("summary"));
+        modification.setDescription(request.getParameter("description"));
+        modification.setDate(sdf.format(date));
+        //上传文件
+        System.out.println(studentService.upload(file, student));
+        modificationService.insert(modification);
+        mailService.sendEmail(student, modification);
+        model.addAttribute("student",student);
+        return "redirect:paperUpload";
+    }
+
 
 }

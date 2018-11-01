@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>论文提交系统</title>
+
+    <!-- BOOTSTRAP STYLES-->
+    <link href="/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONTAWESOME STYLES-->
+    <link href="/css/font-awesome.css" rel="stylesheet" />
+    <!--CUSTOM BASIC STYLES-->
+    <link href="/css/basic.css" rel="stylesheet" />
+    <!--CUSTOM MAIN STYLES-->
+    <link href="/css/custom.css" rel="stylesheet" />
+
+    <!--timeline css-->
+    <link href="/css/timeline.css" rel="stylesheet" />
+
+    <link href="/css/timelinebody.css" rel="stylesheet" />
+
+    <style type="text/css">
+        .form-horizontal{
+            margin-left: 7%;
+        }
+        .form-horizontal .row{
+            margin-left: 5%;
+            width: 40%;
+        }
+        .form-horizontal button{
+            margin-right: 20px;
+        }
+        #main-menu span{
+            color: #aaaaaa;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <li>
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-8" style="margin-top: 3%;">
+                            <span>工号：[[${teacher.id}]]</span>
+                            <br/>
+                            <span>姓名：[[${teacher.name}]]</span>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <a class="active-menu" th:href="@{/checkStudent}"><i class="fa fa-dashboard "></i>学生列表</a>
+                </li>
+                <!--<li>-->
+                <!--<a ><i class="fa fa-dashboard "></i>个人信息管理</a>-->
+                <!--</li>-->
+            </ul>
+        </div>
+    </nav>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="btn btn-danger" th:href="@{/index}"
+                       style="float: right; margin-left: 10px;">退出</a>
+                    <a class="btn btn-primary" style="float: right;" th:href="@{/checkStudent}">返回学生列表</a>
+                    <h1 class="page-head-line">学生信息</h1>
+                    <div class="row">
+                        <div class="col-md-4"><h4>姓名:[[${student.studentName}]]</h4></div>
+                        <div class="col-md-4"><h4>学号:[[${student.studentId}]]</h4></div>
+                        <div class="col-md-4"><h4>邮箱:[[${student.studentEmail}]]</h4></div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <h1 class="page-head-line">论文修改历史</h1>
+                    <div class="main-timeline">
+                        <div class="timeline" th:each="modification : ${modificationList}">
+                            <div class="timeline-content">
+								<span class="date">
+                                    <span>[[${modification.date}]]</span>
+                                    <!--<span class="month">Apr</span>-->
+                                    <!--<span class="year">2017</span>-->
+								</span>
+                                <h2 class="title">[[${modification.summary}]]</h2>
+                                <p class="description">[[${modification.description}]]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /. PAGE WRAPPER  -->
+</div>
+<!-- /. WRAPPER  -->
+<div id="footer-sec">
+    &copy; 论文提交系统
+</div>
+<!-- /. FOOTER  -->
+<!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+<!-- JQUERY SCRIPTS -->
+<script src="/js/jquery-1.10.2.js"></script>
+<!-- BOOTSTRAP SCRIPTS -->
+<script src="/js/bootstrap.js"></script>
+<!-- METISMENU SCRIPTS -->
+<script src="/js/jquery.metisMenu.js"></script>
+<!-- CUSTOM SCRIPTS -->
+<script src="/js/custom.js"></script>
+<!--<script src="/js/easyui.js"></script>-->
+<script src="/js/jquery-latest.js"></script>
+
+
+</body>
+</html>

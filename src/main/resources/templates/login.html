@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>论文提交系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- BOOTSTRAP STYLES-->
+    <link href="../css/bootstrap.css" rel="stylesheet" />
+    <!-- FONTAWESOME STYLES-->
+    <link href="../css/font-awesome.css" rel="stylesheet" />
+    <!--CUSTOM BASIC STYLES-->
+    <link href="../css/basic.css" rel="stylesheet" />
+    <!--CUSTOM MAIN STYLES-->
+    <link href="../css/custom.css" rel="stylesheet" />
+    <!--SweetAlert-->
+    <link href="../css/sweetalert.css" rel="stylesheet" />
+</head>
+<!--<body style="background-color:#FFFAF0;">-->
+<div class="container">
+    <div class="page-header" style="margin-left: 40%;">
+        <h2>论文提交系统</h2>
+    </div>
+    <div class="row text-center " style="padding-top:30px;">
+    </div>
+    <div class="row ">
+        <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+            <div class="panel-body">
+                <ul id="myTab" class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#student" data-toggle="tab" onclick="showTab(0)">
+                            学生登录
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#teacher" data-toggle="tab"  onclick="showTab(1)">
+                            教师登录
+                        </a>
+                    </li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade in active" id="student">
+                        <br/>
+                        <form action="#" th:action="@{/studentLogin}"  method="post">
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
+                                <input type="text" class="form-control" name="studentEmail" placeholder="您的邮箱账号" />
+                            </div>
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
+                                <input type="password" class="form-control"  name="studentPassword" placeholder="您的密码" />
+                            </div>
+                            <div class="form-group">
+                            <label class="checkbox-inline">
+                            <input type="checkbox" />记住我
+                            </label>
+                            </div>
+                            <input type="submit" class="form-control"  name="submit" value="登录" >
+                            <hr />
+                            还没注册?<a th:href="@{/studentRegister}">点此注册</a>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="teacher">
+                        <br/>
+                        <form action="#" th:action="@{/teacherLogin}"  method="post">
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
+                                <input type="text" class="form-control" name="teacherEmail" placeholder="您的邮箱账号" />
+                            </div>
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
+                                <input type="password" class="form-control"  name="teacherPassword" placeholder="您的密码" />
+                            </div>
+                            <div class="form-group">
+                            <label class="checkbox-inline">
+                            <input type="checkbox" />记住我
+                            </label>
+                            </div>
+                            <input type="submit" class="form-control"  name="submit" value="登录" >
+                            <hr />
+                            还没注册?<a th:href="@{/teacherRegister}">点此注册</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/jquery-latest.js}"></script>
+<script th:src="@{/js/sweetalert.min.js}"></script>
+<script type="text/javascript">
+  function showTab(id){
+      if(id == 0){
+          $("#myTab li").eq(0).addClass("active");
+          $("#myTab li").eq(1).removeClass("active");
+          $("#teacher").removeClass("tab-pane fade in active");
+          $("#teacher").addClass("tab-pane fade");
+          $("#student").addClass("tab-pane fade in active");
+      }
+      else{
+          $("#myTab li").eq(1).addClass("active");
+          $("#myTab li").eq(0).removeClass("active");
+          $("#student").removeClass("tab-pane fade in active");
+          $("#student").addClass("tab-pane fade");
+          $("#teacher").addClass("tab-pane fade in active");
+      }
+  }
+</script>
+<script th:inline="javascript">
+    var error = [[${error}]];
+    if(error!=null){
+        swal({
+            title : "温馨提示",
+            text : error
+        });
+    }
+</script>
+</body>
+</html>
