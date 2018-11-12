@@ -2,10 +2,15 @@ package com.nju.paperSystem.entity;
 
 public class modification {
     private int id;
-    private String studentId;
+    private int version;
+    private String studentEmail;
     private String summary;
     private String description;
     private String date;
+    private String fileName;
+    private String teacherAdvice;
+    private String teacherFileName;
+
 
     public modification() {
     }
@@ -14,12 +19,20 @@ public class modification {
         return id;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public int getVersion() {
+        return version;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public String getStudentEmail() {
+        return studentEmail;
+    }
+
+    public void setStudentEmail(String studentEmail) {
+        this.studentEmail = studentEmail;
     }
 
     public String getSummary() {
@@ -44,5 +57,29 @@ public class modification {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getTeacherAdvice() {
+        return teacherAdvice;
+    }
+
+    public void setTeacherAdvice(String teacherAdvice) {
+        this.teacherAdvice = teacherAdvice;
+    }
+
+    public String getTeacherFileName() {
+        return teacherFileName;
+    }
+
+    public void setTeacherFileName(String teacherFileName) {
+        this.teacherFileName = teacherFileName;
     }
 }

@@ -15,18 +15,11 @@
     <!--CUSTOM MAIN STYLES-->
     <link href="/css/custom.css" rel="stylesheet" />
 
-    <!--<link href="/css/easyui.css" rel="stylesheet" />-->
-
-    <!--<link href="/css/icon.css" rel="stylesheet" />-->
-
     <link rel="stylesheet" href="jquery.tablesorter.pager.css" type="text/css" />
     <!-- GOOGLE FONTS-->
     <!--<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />-->
     <style type="text/css">
-        .form-group .col-sm-10{
-            width: 35%;
-        }
-        #main-menu span{
+        #main-menu h5{
             color: #aaaaaa;
         }
     </style>
@@ -38,17 +31,19 @@
             <ul class="nav" id="main-menu">
                 <li>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-6">
                         </div>
-                        <div class="col-md-8" style="margin-top: 3%;">
-                            <span>工号：[[${teacher.id}]]</span>
+                        <div class="col-md-6">
                             <br/>
-                            <span>姓名：[[${teacher.name}]]</span>
+                            <h5>你好! [[${teacher.name}]]</h5>
                         </div>
                     </div>
                 </li>
                 <li>
-                    <a class="active-menu" th:href="@{/checkStudent}"><i class="fa fa-dashboard "></i>学生列表</a>
+                    <a class="active-menu" th:href="@{/checkStudent}"><i class="fa fa-dashboard "></i>在读学生列表</a>
+                </li>
+                <li>
+                    <a  th:href="@{/checkGraduatedStudent}"><i class="fa fa-dashboard "></i>历史学生列表</a>
                 </li>
                 <!--<li>-->
                     <!--<a ><i class="fa fa-dashboard "></i>个人信息管理</a>-->
@@ -64,7 +59,7 @@
                 <div class="col-md-12">
                     <a class="btn btn-danger" th:href="@{/index}"
                        style="float: right">退出</a>
-                    <h1 class="page-head-line">学生列表</h1>
+                    <h1 class="page-head-line">在读学生列表</h1>
                     <div class="row">
                         <div style="margin: 5%;">
                             <!--    Striped Rows Table  -->
@@ -73,41 +68,155 @@
                                     学生信息
                                 </div>
                                 <div class="panel-body">
-                                    <div class="table-responsive">
-                                        <table id="myTable" class="table table-bordered">
+                                    <ul id="myTab" class="nav nav-tabs">
+                                        <li class="active">
+                                            <a href="#master" data-toggle="tab"  onclick="showTab(0)">
+                                                硕士
+                                            </a>
+                                        </li>
+                                        <li >
+                                            <a href="#bachelor" data-toggle="tab" onclick="showTab(1)">
+                                                本科
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#doctor" data-toggle="tab"  onclick="showTab(2)">
+                                                博士
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div id="myTabContent" class="tab-content">
+                                        <div class="tab-pane fade in active" id="master">
+                                            <div class="table-responsive">
+                                                <table id="masterTable" class="table table-bordered">
                                             <thead>
                                             <tr>
-                                                <th>学号</th>
                                                 <th>姓名</th>
                                                 <th>联系电话</th>
                                                 <th>邮箱账号</th>
-                                                <th>论文</th>
-                                                <th>修改历史</th>
+                                                <th>最新论文下载</th>
+                                                <th>最后提交时间</th>
+                                                <th>论文修订</th>
+                                                <th>注销</th>
                                             </tr>
                                             </thead>
                                             <tbody >
-                                            <tr th:each="student:${studentList}">
-                                                <td th:text="${student.studentId}"></td>
-                                                <td th:text="${student.studentName}"></td>
-                                                <td th:text="${student.phone}"></td>
-                                                <td th:text="${student.studentEmail}"></td>
+                                            <tr th:each="master:${masterList}">
+                                                <td th:text="${master.studentName}"></td>
+                                                <td th:text="${master.phone}"></td>
+                                                <td th:text="${master.studentEmail}"></td>
                                                 <td>
-                                                    <a th:if="${student.fileName}!=null" class="btn btn-info" th:href="'/paperDownload/'+${student.studentId}">
+                                                    <a th:if="${master.lastCommit}!=null" class="btn btn-info" th:href="'/paperDownload/'+${master.studentEmail}">
                                                         下载
                                                     </a>
-                                                    <a th:if="${student.fileName}==null"  class="btn btn-info" disabled="disabled">
+                                                    <a th:if="${master.lastCommit}==null"  class="btn btn-info" disabled="disabled">
                                                         下载
                                                     </a>
                                                 </td>
+                                                <td th:text="${master.lastCommit}"></td>
                                                 <td>
-                                                    <a class="btn btn-success" th:href="'/paperInfo/'+${student.studentId}">
-                                                       查看
+                                                    <a class="btn btn-success" th:href="'/paperInfo/'+${master.studentEmail}">
+                                                        查看
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-danger" th:href="'/close/'+${master.studentEmail}">
+                                                        注销
                                                     </a>
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="bachelor">
+                                            <div class="table-responsive">
+                                                <table id="bachelorTable" class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>姓名</th>
+                                                <th>联系电话</th>
+                                                <th>邮箱账号</th>
+                                                <th>最新论文下载</th>
+                                                <th>最后提交时间</th>
+                                                <th>论文修订</th>
+                                                <th>注销</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody >
+                                            <tr th:each="bachelor:${bachelorList}">
+                                                <td th:text="${bachelor.studentName}"></td>
+                                                <td th:text="${bachelor.phone}"></td>
+                                                <td th:text="${bachelor.studentEmail}"></td>
+                                                <td>
+                                                    <a th:if="${bachelor.lastCommit}!=null" class="btn btn-info" th:href="'/paperDownload/'+${bachelor.studentEmail}">
+                                                        下载
+                                                    </a>
+                                                    <a th:if="${bachelor.lastCommit}==null"  class="btn btn-info" disabled="disabled">
+                                                        下载
+                                                    </a>
+                                                </td>
+                                                <td th:text="${bachelor.lastCommit}"></td>
+                                                <td>
+                                                    <a class="btn btn-success" th:href="'/paperInfo/'+${bachelor.studentEmail}">
+                                                        查看
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-danger" th:href="'/close/'+${bachelor.studentEmail}">
+                                                        注销
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="doctor">
+                                            <div class="table-responsive">
+                                                <table id="doctorTable" class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>姓名</th>
+                                                <th>联系电话</th>
+                                                <th>邮箱账号</th>
+                                                <th>最新论文下载</th>
+                                                <th>最后提交时间</th>
+                                                <th>论文修订</th>
+                                                <th>注销</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody >
+                                            <tr th:each="doctor:${doctorList}">
+                                                <td th:text="${doctor.studentName}"></td>
+                                                <td th:text="${doctor.phone}"></td>
+                                                <td th:text="${doctor.studentEmail}"></td>
+                                                <td>
+                                                    <a th:if="${doctor.lastCommit}!=null" class="btn btn-info" th:href="'/paperDownload/'+${doctor.studentEmail}">
+                                                        下载
+                                                    </a>
+                                                    <a th:if="${doctor.lastCommit}==null"  class="btn btn-info" disabled="disabled">
+                                                        下载
+                                                    </a>
+                                                </td>
+                                                <td th:text="${doctor.lastCommit}"></td>
+                                                <td>
+                                                    <a class="btn btn-success" th:href="'/paperInfo/'+${doctor.studentEmail}">
+                                                        查看
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-danger" th:href="'/close/'+${doctor.studentEmail}">
+                                                        注销
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
                                 </div>
                             </div>
                             <!--  End  Striped Rows Table  -->
@@ -136,6 +245,51 @@
 <!--<script src="/js/easyui.js"></script>-->
 <script src="/js/jquery-latest.js"></script>
 
+<script src="/js/jquery.tablesorter.js"></script>
+
+<script type="text/javascript">
+    function showTab(num){
+        if(num == 0){
+            $("#myTab li").eq(0).addClass("active");
+            $("#myTab li").eq(1).removeClass("active");
+            $("#myTab li").eq(2).removeClass("active");
+            $("#master").addClass("tab-pane fade in active");
+            change("#bachelor");
+            change("#doctor");
+        }
+        else if(num == 1){
+            $("#myTab li").eq(1).addClass("active");
+            $("#myTab li").eq(0).removeClass("active");
+            $("#myTab li").eq(2).removeClass("active");
+            $("#bachelor").addClass("tab-pane fade in active");
+            change("#master");
+            change("#doctor");
+        }
+        else{
+            $("#myTab li").eq(2).addClass("active");
+            $("#myTab li").eq(0).removeClass("active");
+            $("#myTab li").eq(1).removeClass("active");
+            $("#doctor").addClass("tab-pane fade in active");
+            change("#master");
+            change("#bachelor");
+        }
+    }
+
+    function change(id){
+        $(id).removeClass("tab-pane fade in active");
+        $(id).addClass("tab-pane fade");
+    }
+</script>
+
+<script>
+    $(document).ready(function()
+        {
+            $("#masterTable").tablesorter();
+            $("#bachelorTable").tablesorter();
+            $("#doctorTable").tablesorter();
+        }
+    );
+</script>
 
 </body>
 </html>

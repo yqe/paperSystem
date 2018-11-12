@@ -21,7 +21,7 @@
     .form-group .col-sm-10{
         width: 35%;
     }
-    #main-menu span{
+    #main-menu h5{
         color: #aaaaaa;
     }
     </style>
@@ -33,12 +33,11 @@
             <ul class="nav" id="main-menu">
                 <li>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-6">
                         </div>
-                        <div class="col-md-8" style="margin-top: 3%;">
-                            <span>学号：[[${student.studentId}]]</span>
+                        <div class="col-md-6">
                             <br/>
-                            <span>姓名：[[${student.studentName}]]</span>
+                            <h5>你好! [[${student.studentName}]]</h5>
                         </div>
                     </div>
                 </li>
@@ -63,10 +62,10 @@
                     <form class="form-horizontal" th:action="@{/studentInfoUpdate}"  method="post">
                         <div style="margin-left: 5%" class="row">
                             <div class="form-group" >
-                                <label for="studentId" class="col-sm-2 control-label">学号:</label>
+                                <label for="studentEmail" class="col-sm-2 control-label">邮箱:</label>
                                 <div class="col-sm-10" style="margin-top: 8px;">
-                                    <input class="form-control"  type="hidden" id="studentId" name="studentId"  th:value="${student.studentId}"/>
-                                    <span >[[${student.studentId}]]</span>
+                                    [[${student.studentEmail}]]
+                                    <input class="form-control" type="hidden" id="studentEmail" name="studentEmail" th:value="${student.studentEmail}" />
                                 </div>
                             </div>
                             <div class="form-group" >
@@ -75,22 +74,10 @@
                                     <input class="form-control"  type="text" id="studentName" name="studentName"  th:value="${student.studentName}"/>
                                 </div>
                             </div>
-                            <div class="form-group" >
-                                <label for="studentEmail" class="col-sm-2 control-label">邮箱:</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  type="text" id="studentEmail" name="studentEmail" th:value="${student.studentEmail}" />
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <label for="phone" class="col-sm-2 control-label">手机:</label>
                                 <div class="col-sm-10">
                                     <input class="form-control"  type="text" id="phone" name="phone" th:value="${student.phone}" />
-                                </div>
-                            </div>
-                            <div class="form-group" >
-                                <label for="teacherName" class="col-sm-2 control-label">导师姓名:</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control"  type="text" id="teacherName" name="teacherName" th:value="${student.teacherName}"/>
                                 </div>
                             </div>
                             <div class="form-group" >

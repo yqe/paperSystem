@@ -6,8 +6,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 @Component
@@ -35,26 +41,37 @@ public class emailConfig {
         javaMailSender.setUsername(account);
         javaMailSender.setPassword(password);
         javaMailSender.setPort(Integer.valueOf(port));
-        System.out.println(host);
-        System.out.println(account);
-        System.out.println(password);
+//        System.out.println(host);
+//        System.out.println(account);
+//        System.out.println(password);
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", isAuth);
         properties.put("mail.smtp.ssl.enable", Boolean.valueOf(ssl));
         properties.put("mail.smtp.timeout", outTime);
+        System.getProperties().setProperty("mail.mime.splitlongparameters", "false");
         javaMailSender.setJavaMailProperties(properties);
         return javaMailSender;
     }
 
-    public void sendSimpleMail(email email) {
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom(account);
+    public void sendMail(email email, String studentEmail, String fileName) throws MessagingException, IOException {
         String receiver = email.getReceiver();
         String receivers[] = receiver.split(";");
-        simpleMailMessage.setTo(receivers);
-        simpleMailMessage.setSubject(email.getSubject());
-        simpleMailMessage.setText(email.getContent());
-        getMailSender().send(simpleMailMessage);
+        // "E://aim//"+student.getStudentEmail()+"//";//本地路径
+        // "//home//ubuntu//web//papersystem"+student.getStudentEmail()+"//";//服务器路径
+        String filepath = "E://aim//"+studentEmail+"//"+fileName;
+        MimeMessage mimMessage = getMailSender().createMimeMessage();
+        try {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimMessage, true, "utf-8");
+            messageHelper.setFrom(account);
+            messageHelper.setTo(receivers);
+            messageHelper.setSubject(email.getSubject());
+            messageHelper.setText(email.getContent(), true);
+            messageHelper.addAttachment(MimeUtility.encodeWord(fileName),new File(filepath));
+            getMailSender().send(mimMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

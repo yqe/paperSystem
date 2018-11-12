@@ -13,10 +13,9 @@ public class teacherProvider {
         if(teacher!=null){
             BEGIN();
             INSERT_INTO(TABLE_NAME);
-            VALUES("id","#{teacher.id,javaType=String,jdbcType=VARCHAR}");
             VALUES("name","#{teacher.name,javaType=String,jdbcType=VARCHAR}");
-            VALUES("password","#{user.password,javaType=String,jdbcType=VARCHAR}");
-            VALUES("email","#{user.email,javaType=String,jdbcType=VARCHAR}");
+            VALUES("password","#{teacher.password,javaType=String,jdbcType=VARCHAR}");
+            VALUES("email","#{teacher.email,javaType=String,jdbcType=VARCHAR}");
         }
         return SQL();
 
@@ -29,8 +28,7 @@ public class teacherProvider {
         UPDATE(TABLE_NAME);
         SET("name = #{teacher.name,javaType=String,jdbcType=VARCHAR}");
         SET("password = #{teacher.password,javaType=String,jdbcType=VARCHAR}");
-        SET("email = #{teacher.email,javaType=String,jdbcType=VARCHAR}");
-        WHERE("id = #{teacher.id,javaType=String,jdbcType=VARCHAR}");
+        WHERE("email = #{teacher.email,javaType=String,jdbcType=VARCHAR}");
         return SQL();
     }
 }

@@ -5,6 +5,7 @@ import com.nju.paperSystem.entity.student;
 import com.nju.paperSystem.service.mailService;
 import com.nju.paperSystem.service.modificationService;
 import com.nju.paperSystem.service.studentService;
+import com.nju.paperSystem.service.teacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,10 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,6 +29,8 @@ public class studentController {
     modificationService modificationService;
     @Autowired
     mailService mailService;
+    @Autowired
+    teacherService teacherService;
 
     @RequestMapping(value="/",method = RequestMethod.GET)
     public String index(){
@@ -51,7 +53,7 @@ public class studentController {
         String password = request.getParameter("studentPassword");
         if(studentService.login(email, password)){
             HttpSession session = request.getSession();
-            session.setAttribute("studentId", studentService.getStudentByEmail(email).getStudentId());
+            session.setAttribute("email", email);
             return "redirect:paperUpload";
         }
         else{
@@ -62,20 +64,20 @@ public class studentController {
 
     @RequestMapping(value="/addStudent",method = RequestMethod.POST)
     public String addStudent(Model model,HttpServletRequest request){
-        String studentId = request.getParameter("studentId");
-        if(studentService.getStudentById(studentId) != null){
-            System.out.println(studentId);
-            model.addAttribute("error","该学号已存在，请重新注册！");
+        String email = request.getParameter("email");
+        if(studentService.getStudentByEmail(email) != null){
+            System.out.println(email);
+            model.addAttribute("error","该邮箱已存在，请重新注册！");
             return "studentRegister";
         }
         student student = new student();
-        student.setStudentId(studentId);
         student.setStudentEmail(request.getParameter("email"));
         student.setStudentName(request.getParameter("name"));
         student.setPhone(request.getParameter("phone"));
         student.setPassword(request.getParameter("password"));
-        student.setTeacherName(request.getParameter("teacherName"));
         student.setTeacherEmail(request.getParameter("teacherEmail"));
+        student.setDegree(request.getParameter("degree"));
+        student.setState(0);
         studentService.insert(student);
         return "redirect:index";
     }
@@ -83,19 +85,17 @@ public class studentController {
     @RequestMapping(value = "/studentInfo",method = RequestMethod.GET)
     public String studentInfo(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        student student=studentService.getStudentById((session.getAttribute("studentId")).toString());
+        student student=studentService.getStudentByEmail(session.getAttribute("email").toString());
         model.addAttribute("student",student);
         return "studentInfoUpdate";
     }
 
     @RequestMapping(value = "/studentInfoUpdate",method = RequestMethod.POST)
     public ModelAndView studentInfoUpdate(HttpServletRequest request) {
-        String studentId = request.getParameter("studentId");
-        student student = studentService.getStudentById(studentId);
-        student.setStudentEmail(request.getParameter("studentEmail"));
+        String email = request.getParameter("studentEmail");
+        student student = studentService.getStudentByEmail(email);
         student.setPhone(request.getParameter("phone"));
         student.setStudentName(request.getParameter("studentName"));
-        student.setTeacherName(request.getParameter("teacherName"));
         student.setTeacherEmail(request.getParameter("teacherEmail"));
         studentService.update(student);
         return new ModelAndView("redirect:/studentInfo");
@@ -104,28 +104,39 @@ public class studentController {
     @RequestMapping(value = "/paperUpload",method = RequestMethod.GET)
     public String paperUpload(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        student student = studentService.getStudentById((session.getAttribute("studentId")).toString());
-        List<modification> modificationList = modificationService.getAllModificationByStudentId(student.getStudentId());
+        student student = studentService.getStudentByEmail((session.getAttribute("email")).toString());
+        List<modification> modificationList = modificationService.getAllModificationByStudentEmail(student.getStudentEmail());
         model.addAttribute("student",student);
         model.addAttribute("modificationList",modificationList);
         return "paperUpload";
     }
 
     @RequestMapping(value = "/paperModification",method = RequestMethod.POST)
-    public String paperModification(@RequestParam("file") MultipartFile file,Model model, HttpServletRequest request) {
+    public String paperModification(@RequestParam("file") MultipartFile file,Model model, HttpServletRequest request) throws MessagingException, IOException {
         HttpSession session = request.getSession();
-        student student=studentService.getStudentById((session.getAttribute("studentId")).toString());
+        student student = studentService.getStudentByEmail((session.getAttribute("email")).toString());
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         Date date=new Date();
         modification modification =new modification();
-        modification.setStudentId(student.getStudentId());
+        List<modification> modificationList = modificationService.getModificationListByVersion(student.getStudentEmail());
+        if(modificationList.size()>0){
+            modification.setVersion(modificationList.get(0).getVersion()+1);
+        }
+        else{
+            modification.setVersion(1);
+        }
+        modification.setStudentEmail(student.getStudentEmail());
         modification.setSummary(request.getParameter("summary"));
         modification.setDescription(request.getParameter("description"));
         modification.setDate(sdf.format(date));
-        //上传文件
-        System.out.println(studentService.upload(file, student));
+        student.setLastCommit(sdf.format(date));
+        // 上传文件
+        modificationService.upload(file, student, modification,0);
+        studentService.update(student);
         modificationService.insert(modification);
-        mailService.sendEmail(student, modification);
+        // 邮件发送
+        String fileName = student.getStudentName()+"-"+modification.getDate()+"-"+modification.getVersion()+"-"+file.getOriginalFilename();
+        mailService.sendEmail(student, modification, fileName);
         model.addAttribute("student",student);
         return "redirect:paperUpload";
     }

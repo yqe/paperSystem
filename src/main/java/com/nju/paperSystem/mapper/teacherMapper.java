@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface teacherMapper {
-    @Select("SELECT * FROM teacher WHERE id = #{id}")
-    teacher getTeacherById(String id);
 
     @Select("SELECT * FROM teacher WHERE email = #{email}")
     teacher getTeacherByEmail(String email);

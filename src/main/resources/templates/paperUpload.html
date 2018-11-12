@@ -33,7 +33,7 @@
         .form-horizontal button{
             margin-right: 20px;
         }
-        #main-menu span{
+        #main-menu h5{
             color: #aaaaaa;
         }
     </style>
@@ -45,12 +45,11 @@
             <ul class="nav" id="main-menu">
                 <li>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-6">
                         </div>
-                        <div class="col-md-8" style="margin-top: 3%;">
-                            <span>学号：[[${student.studentId}]]</span>
+                        <div class="col-md-6">
                             <br/>
-                            <span>姓名：[[${student.studentName}]]</span>
+                            <h5>你好! [[${student.studentName}]]</h5>
                         </div>
                     </div>
                 </li>
@@ -91,7 +90,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="description">具体说明</label>
-                                <textarea class="form-control" rows="3" name="description" id="description"></textarea>
+                                <textarea class="form-control" rows="5" name="description" id="description"></textarea>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-default">上传</button>
@@ -105,12 +104,18 @@
                         <div class="timeline" th:each="modification : ${modificationList}">
                             <div class="timeline-content">
 								<span class="date">
-                                    <span>[[${modification.date}]]</span>
-									<!--<span class="month">Apr</span>-->
-									<!--<span class="year">2017</span>-->
+                                    <span class="month">[[${modification.version}]]</span>
+                                    <br/>
+                                    <span class="year">[[${modification.date}]]</span>
 								</span>
                                 <h2 class="title">[[${modification.summary}]]</h2>
-                                <p class="description">[[${modification.description}]]</p>
+                                <p class="description"><a class="btn btn-success" th:href="'/paperDownload/'+${modification.id}">历史版本下载</a></p>
+                            </div>
+                            <div class="adivce-content">
+                                <div th:if="${modification.teacherAdvice==null}"  class="upload"><a class="btn btn-primary btn-lg disabled" role="button">修改论文</a></div>
+                                <div th:if="${modification.teacherAdvice!=null}"><h2 class="advice">[[${modification.teacherAdvice}]]</h2>
+                                    <p class="adviceDescription"><a class="btn btn-success" th:href="'/paperDownload/'+${modification.id}">教师版本下载</a></p>
+                                </div>
                             </div>
                         </div>
                     </div>
