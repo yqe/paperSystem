@@ -97,7 +97,9 @@
 /*}*/
 .main-timeline .title,
 .main-timeline .title:after{
-    background: #02a2dd;
+    opacity: 0.8;
+    background-color: #428bca;
+    border-color: #357ebd;
 }
 .main-timeline .adivce-content{
      width: 40%;
