@@ -134,19 +134,18 @@ public class teacherController {
         String studentEmail = modificationService.getModificationById(id).getStudentEmail();
         student student = studentService.getStudentByEmail(studentEmail);
         modification modification = modificationService.getModificationById(id);
-
         //更新教师意见和修改的论文
         modification.setTeacherAdvice(request.getParameter("advice"));
         modificationService.upload(file, student, modification,1);
         return "redirect:paperInfo/"+studentEmail;
     }
 
-    @RequestMapping(value="/close/{studentEmail}",method = RequestMethod.POST)
+    @RequestMapping(value="/close/{studentEmail}",method = RequestMethod.GET)
     public String close(@PathVariable("studentEmail")String studentEmail, HttpServletRequest request){
         student student = studentService.getStudentByEmail(studentEmail);
         student.setState(1);
         studentService.update(student);
-        return "redirect:checkStudent";
+        return "redirect:/checkStudent";
     }
 
 

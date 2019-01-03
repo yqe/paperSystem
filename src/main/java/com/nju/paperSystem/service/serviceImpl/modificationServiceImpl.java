@@ -3,6 +3,7 @@ package com.nju.paperSystem.service.serviceImpl;
 import com.nju.paperSystem.entity.modification;
 import com.nju.paperSystem.entity.student;
 import com.nju.paperSystem.mapper.modificationMapper;
+import com.nju.paperSystem.mapper.teacherMapper;
 import com.nju.paperSystem.service.modificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ import java.util.List;
 public class modificationServiceImpl implements modificationService {
     @Autowired
     modificationMapper modificationMapper;
+    @Autowired
+    teacherMapper teacherMapper;
 
     @Override
     public modification getModificationById(int id) {
@@ -56,7 +59,7 @@ public class modificationServiceImpl implements modificationService {
                 fileName = student.getStudentName()+"-"+modification.getDate()+"-"+modification.getVersion()+"-"+file.getOriginalFilename();
             }
             else{
-                fileName = student.getTeacherEmail()+"-"+student.getStudentName()+"-"+modification.getDate()+"-"+modification.getVersion()+"-"+file.getOriginalFilename();
+                fileName = teacherMapper.getTeacherByEmail(student.getTeacherEmail()).getName()+"-"+file.getOriginalFilename();
             }
 
             modification.setFileName(fileName);
