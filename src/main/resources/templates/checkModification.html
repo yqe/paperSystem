@@ -91,7 +91,7 @@
                             <div class="adivce-content">
                                 <div th:if="${modification.teacherAdvice==null}" class="upload"><a class="btn btn-primary" th:href="'/paperRevise/'+${modification.id}">修改论文</a></div>
                                 <div th:if="${modification.teacherAdvice!=null}"><h2 class="advice">[[${modification.teacherAdvice}]]</h2>
-                                    <p class="adviceDescription"><a class="btn btn-success" th:href="'/paperDownload/'+${modification.id}">教师版本下载</a></p>
+                                    <p class="adviceDescription"><a class="btn btn-success" th:href="'/teacherVersionDownload/'+${modification.id}">教师版本下载</a></p>
                                 </div>
                             </div>
                         </div>

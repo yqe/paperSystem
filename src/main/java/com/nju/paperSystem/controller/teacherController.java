@@ -109,13 +109,13 @@ public class teacherController {
     @RequestMapping(value = "/paperDownload/{id}",method = RequestMethod.GET)
     public String paperDownload(@PathVariable("id")int id, Model model, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         modificationService.download(request, response,modificationService.getModificationById(id),0);
-        return "redirect:checkStudent";
+        return "redirect:/checkStudent";
     }
 
     @RequestMapping(value = "/teacherVersionDownload/{id}",method = RequestMethod.GET)
     public String teacherVersionDownload(@PathVariable("id")int id, Model model, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         modificationService.download(request, response,modificationService.getModificationById(id),1);
-        return "redirect:checkStudent";
+        return "redirect:/checkStudent";
     }
 
     @RequestMapping(value = "/paperRevise/{id}",method = RequestMethod.GET)

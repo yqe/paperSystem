@@ -91,6 +91,7 @@ public class modificationServiceImpl implements modificationService {
         }
         else{
             fileName =  modification.getTeacherFileName();
+            System.out.println(fileName);
         }
         if (fileName != null) {
             //设置文件路径
