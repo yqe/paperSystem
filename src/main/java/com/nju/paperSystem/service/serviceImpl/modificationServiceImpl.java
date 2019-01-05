@@ -56,13 +56,14 @@ public class modificationServiceImpl implements modificationService {
             // 获取文件名
             String fileName = "";
             if(type == 0){
-                fileName = student.getStudentName()+"-"+modification.getDate()+"-"+modification.getVersion()+"-"+file.getOriginalFilename();
+                fileName = student.getStudentName()+"-"+modification.getDate()+"-版本"+modification.getVersion()+"-"+file.getOriginalFilename();
+                modification.setFileName(fileName);
             }
             else{
-                fileName = teacherMapper.getTeacherByEmail(student.getTeacherEmail()).getName()+"-"+file.getOriginalFilename();
+                fileName = teacherMapper.getTeacherByEmail(student.getTeacherEmail()).getName()+"-"+student.getStudentName()+"-"+modification.getDate()+"-版本"+modification.getVersion()+"-"+file.getOriginalFilename();
+                modification.setTeacherFileName(fileName);
             }
 
-            modification.setFileName(fileName);
             update(modification);
             // 设置文件存储路径
             // "E://aim//"+student.getStudentEmail()+"//";//本地路径

@@ -51,6 +51,10 @@ public class studentController {
     public String studentLogin(Model model, HttpServletRequest request){
         String email = request.getParameter("studentEmail");
         String password = request.getParameter("studentPassword");
+        if(studentService.getStudentByEmail(email) == null){
+            model.addAttribute("error", "账号不存在！");
+            return "login";
+        }
         if(studentService.login(email, password)){
             HttpSession session = request.getSession();
             session.setAttribute("email", email);
@@ -79,7 +83,7 @@ public class studentController {
         student.setDegree(request.getParameter("degree"));
         student.setState(0);
         studentService.insert(student);
-        return "redirect:index";
+        return "redirect:/index";
     }
 
     @RequestMapping(value = "/studentInfo",method = RequestMethod.GET)
@@ -112,12 +116,12 @@ public class studentController {
     }
 
     @RequestMapping(value = "/paperModification",method = RequestMethod.POST)
-    public String paperModification(@RequestParam("file") MultipartFile file,Model model, HttpServletRequest request) throws MessagingException, IOException {
+    public ModelAndView paperModification(@RequestParam("file") MultipartFile file,Model model, HttpServletRequest request) throws MessagingException, IOException {
         HttpSession session = request.getSession();
         student student = studentService.getStudentByEmail((session.getAttribute("email")).toString());
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date=new Date();
-        modification modification =new modification();
+        modification modification = new modification();
         List<modification> modificationList = modificationService.getModificationListByVersion(student.getStudentEmail());
         if(modificationList.size()>0){
             modification.setVersion(modificationList.get(0).getVersion()+1);
@@ -131,14 +135,17 @@ public class studentController {
         modification.setDate(sdf.format(date));
         student.setLastCommit(sdf.format(date));
         // 上传文件
-        modificationService.upload(file, student, modification,0);
+        String state = modificationService.upload(file, student, modification,0);
         studentService.update(student);
         modificationService.insert(modification);
         // 邮件发送
-        String fileName = student.getStudentName()+"-"+modification.getDate()+"-"+modification.getVersion()+"-"+file.getOriginalFilename();
-        mailService.sendEmail(student, modification, fileName);
-        model.addAttribute("student",student);
-        return "redirect:paperUpload";
+        mailService.sendEmail(student, modification);
+        if(state.equals("上传成功"))
+            model.addAttribute("message","提交成功");
+        else
+            model.addAttribute("message","提交失败");
+
+        return new ModelAndView("redirect:paperUpload");
     }
 
 

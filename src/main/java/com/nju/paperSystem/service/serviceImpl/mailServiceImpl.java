@@ -17,7 +17,7 @@ public class mailServiceImpl implements mailService {
     emailConfig mc;
 
     @Override
-    public void sendEmail(student student, modification modification,String fileName) throws MessagingException, IOException {
+    public void sendEmail(student student, modification modification) throws MessagingException, IOException {
         email studentemail = new email();
         email teacheremail = new email();
         //给学生发送邮件提醒
@@ -28,8 +28,21 @@ public class mailServiceImpl implements mailService {
         teacheremail.setReceiver(student.getTeacherEmail());
         teacheremail.setContent(modification.getSummary()+"\n"+modification.getDescription());
         teacheremail.setSubject(student.getStudentName()+"-版本"+modification.getVersion()+"-"+modification.getDate()+"-学位论文");
-        mc.sendMail(studentemail, student.getStudentEmail(), fileName);
-        mc.sendMail(teacheremail, student.getStudentEmail(), fileName);
+        mc.sendMail(studentemail, student.getStudentEmail(), modification.getFileName());
+        mc.sendMail(teacheremail, student.getStudentEmail(), modification.getFileName());
+        System.out.println("successful to send message!");
+    }
+
+    @Override
+    public void sendReviseEmail(student student, modification modification) throws MessagingException, IOException {
+        email studentemail = new email();
+//        email teacheremail = new email();
+        //给学生发送邮件提醒
+        studentemail.setReceiver(student.getStudentEmail());
+        studentemail.setContent(modification.getSummary()+"\n"+modification.getTeacherAdvice());
+        studentemail.setSubject(student.getStudentName()+"-版本"+modification.getVersion()+"-"+modification.getDate()+"-论文批注");
+        mc.sendMail(studentemail, student.getStudentEmail(), modification.getTeacherFileName());
+//        mc.sendMail(teacheremail, student.getStudentEmail(), fileName);
         System.out.println("successful to send message!");
     }
 }

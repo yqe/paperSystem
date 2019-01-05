@@ -3,6 +3,7 @@ package com.nju.paperSystem.controller;
 import com.nju.paperSystem.entity.modification;
 import com.nju.paperSystem.entity.student;
 import com.nju.paperSystem.entity.teacher;
+import com.nju.paperSystem.service.mailService;
 import com.nju.paperSystem.service.modificationService;
 import com.nju.paperSystem.service.studentService;
 import com.nju.paperSystem.service.teacherService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -29,6 +31,8 @@ public class teacherController {
     modificationService modificationService;
     @Autowired
     studentService studentService;
+    @Autowired
+    mailService mailService;
 
     @RequestMapping(value="/teacherRegister",method = RequestMethod.GET)
     public String teacherRegister(){
@@ -54,6 +58,10 @@ public class teacherController {
     public String teacherLogin(Model model, HttpServletRequest request){
         String email = request.getParameter("teacherEmail");
         String password = request.getParameter("teacherPassword");
+        if(teacherService.getTeacherByEmail(email) == null){
+            model.addAttribute("error", "账号不存在！");
+            return "login";
+        }
         if(teacherService.login(email, password)){
             HttpSession session = request.getSession();
             session.setAttribute("email",email);
@@ -106,9 +114,10 @@ public class teacherController {
         return "checkModification";
     }
 
-    @RequestMapping(value = "/paperDownload/{id}",method = RequestMethod.GET)
-    public String paperDownload(@PathVariable("id")int id, Model model, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        modificationService.download(request, response,modificationService.getModificationById(id),0);
+    @RequestMapping(value = "/paperDownload/{email}",method = RequestMethod.GET)
+    public String paperDownload(@PathVariable("email")String email, Model model, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        modification modification = modificationService.getAllModificationByStudentEmail(email).get(0);
+        modificationService.download(request, response,modificationService.getModificationById(modification.getId()),0);
         return "redirect:/checkStudent";
     }
 
@@ -129,7 +138,7 @@ public class teacherController {
     }
 
     @RequestMapping(value = "/reviseUpload",method = RequestMethod.POST)
-    public String reviseUpload(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+    public String reviseUpload(@RequestParam("file") MultipartFile file, Model model, HttpServletRequest request) throws IOException, MessagingException {
         int id = Integer.valueOf(request.getParameter("id"));
         String studentEmail = modificationService.getModificationById(id).getStudentEmail();
         student student = studentService.getStudentByEmail(studentEmail);
@@ -137,6 +146,7 @@ public class teacherController {
         //更新教师意见和修改的论文
         modification.setTeacherAdvice(request.getParameter("advice"));
         modificationService.upload(file, student, modification,1);
+        mailService.sendReviseEmail(student, modification);
         return "redirect:paperInfo/"+studentEmail;
     }
 

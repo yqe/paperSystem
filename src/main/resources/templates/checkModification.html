@@ -74,6 +74,11 @@
                         <div class="col-md-4"><h4>邮箱:[[${student.studentEmail}]]</h4></div>
                         <div class="col-md-4"><h4>手机:[[${student.phone}]]</h4></div>
                     </div>
+                    <div class="row">
+                        <a class="btn btn-danger" th:href="'/close/'+${student.studentEmail}"  style="float: left; margin-left: 10px;">
+                            将学生移入历史列表
+                        </a>
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <h1 class="page-head-line">论文修改历史</h1>
