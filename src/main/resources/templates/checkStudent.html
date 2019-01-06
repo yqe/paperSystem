@@ -106,7 +106,7 @@
                                                 <td th:text="${master.phone}"></td>
                                                 <td th:text="${master.studentEmail}"></td>
                                                 <td>
-                                                    <a th:if="${master.lastCommit}!=null" class="btn btn-info" th:href="'/paperDownload/'+${master.studentEmail}">
+                                                    <a th:if="${master.lastCommit}!=null" class="btn btn-info" th:href="'/newestPaperDownload/'+${master.studentEmail}">
                                                         下载
                                                     </a>
                                                     <a th:if="${master.lastCommit}==null"  class="btn btn-info" disabled="disabled">
@@ -149,7 +149,7 @@
                                                 <td th:text="${bachelor.phone}"></td>
                                                 <td th:text="${bachelor.studentEmail}"></td>
                                                 <td>
-                                                    <a th:if="${bachelor.lastCommit}!=null" class="btn btn-info" th:href="'/paperDownload/'+${bachelor.studentEmail}">
+                                                    <a th:if="${bachelor.lastCommit}!=null" class="btn btn-info" th:href="'/newestPaperDownload/'+${bachelor.studentEmail}">
                                                         下载
                                                     </a>
                                                     <a th:if="${bachelor.lastCommit}==null"  class="btn btn-info" disabled="disabled">
@@ -192,7 +192,7 @@
                                                 <td th:text="${doctor.phone}"></td>
                                                 <td th:text="${doctor.studentEmail}"></td>
                                                 <td>
-                                                    <a th:if="${doctor.lastCommit}!=null" class="btn btn-info" th:href="'/paperDownload/'+${doctor.studentEmail}">
+                                                    <a th:if="${doctor.lastCommit}!=null" class="btn btn-info" th:href="'/newestPaperDownload/'+${doctor.studentEmail}">
                                                         下载
                                                     </a>
                                                     <a th:if="${doctor.lastCommit}==null"  class="btn btn-info" disabled="disabled">

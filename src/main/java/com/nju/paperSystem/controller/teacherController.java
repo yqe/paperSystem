@@ -8,6 +8,7 @@ import com.nju.paperSystem.service.modificationService;
 import com.nju.paperSystem.service.studentService;
 import com.nju.paperSystem.service.teacherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import java.io.*;
 import java.util.List;
 
 @Controller
+@EnableAsync
 public class teacherController {
     @Autowired
     teacherService teacherService;
@@ -114,9 +116,16 @@ public class teacherController {
         return "checkModification";
     }
 
-    @RequestMapping(value = "/paperDownload/{email}",method = RequestMethod.GET)
-    public String paperDownload(@PathVariable("email")String email, Model model, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+    @RequestMapping(value = "/newestPaperDownload/{email}",method = RequestMethod.GET)
+    public String newestPaperDownload(@PathVariable("email")String email, Model model, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         modification modification = modificationService.getAllModificationByStudentEmail(email).get(0);
+        modificationService.download(request, response,modificationService.getModificationById(modification.getId()),0);
+        return "redirect:/checkStudent";
+    }
+
+    @RequestMapping(value = "/paperDownload/{id}",method = RequestMethod.GET)
+    public String paperDownload(@PathVariable("id")int id, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        modification modification = modificationService.getModificationById(id);
         modificationService.download(request, response,modificationService.getModificationById(modification.getId()),0);
         return "redirect:/checkStudent";
     }
@@ -155,7 +164,7 @@ public class teacherController {
         student student = studentService.getStudentByEmail(studentEmail);
         student.setState(1);
         studentService.update(student);
-        return "redirect:/checkStudent";
+        return "redirect:/checkGraduatedStudent";
     }
 
 

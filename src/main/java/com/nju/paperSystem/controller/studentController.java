@@ -7,6 +7,7 @@ import com.nju.paperSystem.service.modificationService;
 import com.nju.paperSystem.service.studentService;
 import com.nju.paperSystem.service.teacherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
+@EnableAsync
 public class studentController {
     @Autowired
     studentService studentService;
@@ -109,9 +111,13 @@ public class studentController {
     public String paperUpload(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         student student = studentService.getStudentByEmail((session.getAttribute("email")).toString());
+        String messeage = request.getParameter("message");
         List<modification> modificationList = modificationService.getAllModificationByStudentEmail(student.getStudentEmail());
+        if(messeage != null)
+            model.addAttribute("state",messeage);
         model.addAttribute("student",student);
         model.addAttribute("modificationList",modificationList);
+
         return "paperUpload";
     }
 
@@ -119,6 +125,8 @@ public class studentController {
     public ModelAndView paperModification(@RequestParam("file") MultipartFile file,Model model, HttpServletRequest request) throws MessagingException, IOException {
         HttpSession session = request.getSession();
         student student = studentService.getStudentByEmail((session.getAttribute("email")).toString());
+        ModelAndView view = new ModelAndView("redirect:paperUpload");
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date=new Date();
         modification modification = new modification();
@@ -140,12 +148,13 @@ public class studentController {
         modificationService.insert(modification);
         // 邮件发送
         mailService.sendEmail(student, modification);
-        if(state.equals("上传成功"))
-            model.addAttribute("message","提交成功");
-        else
-            model.addAttribute("message","提交失败");
 
-        return new ModelAndView("redirect:paperUpload");
+        if(state.equals("上传成功"))
+            view.addObject("message","提交成功");
+        else
+            view.addObject("message","提交失败");
+
+        return view;
     }
 
 

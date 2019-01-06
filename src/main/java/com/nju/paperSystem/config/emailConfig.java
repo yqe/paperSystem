@@ -41,9 +41,6 @@ public class emailConfig {
         javaMailSender.setUsername(account);
         javaMailSender.setPassword(password);
         javaMailSender.setPort(Integer.valueOf(port));
-//        System.out.println(host);
-//        System.out.println(account);
-//        System.out.println(password);
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", isAuth);
         properties.put("mail.smtp.ssl.enable", Boolean.valueOf(ssl));

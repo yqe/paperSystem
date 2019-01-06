@@ -6,6 +6,7 @@ import com.nju.paperSystem.entity.modification;
 import com.nju.paperSystem.entity.student;
 import com.nju.paperSystem.service.mailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -16,6 +17,7 @@ public class mailServiceImpl implements mailService {
     @Autowired
     emailConfig mc;
 
+    @Async
     @Override
     public void sendEmail(student student, modification modification) throws MessagingException, IOException {
         email studentemail = new email();

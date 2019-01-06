@@ -136,22 +136,22 @@
 <!-- JQUERY SCRIPTS -->
 <script src="/js/jquery-1.10.2.js"></script>
 <!-- BOOTSTRAP SCRIPTS -->
-<script src="/js/bootstrap.js"></script>
+<!--<script src="/js/bootstrap.js"></script>-->
 <!-- PAGE LEVEL SCRIPTS -->
 <script src="/js/bootstrap-fileupload.js"></script>
 <!-- METISMENU SCRIPTS -->
 <script src="/js/jquery.metisMenu.js"></script>
 <!-- CUSTOM SCRIPTS -->
-<script src="/js/custom.js"></script>
+<!--<script src="/js/custom.js"></script>-->
 <!--<script src="/js/easyui.js"></script>-->
 <script src="/js/jquery-latest.js"></script>
 <script th:src="@{/js/sweetalert.min.js}"></script>
 <script th:inline="javascript">
-    var message = [[${message}]];
-    if(message!=null){
+    var state = [[${state}]];
+    if(state!=null){
         swal({
             title : "温馨提示",
-            text : message
+            text : state
         });
     }
 </script>

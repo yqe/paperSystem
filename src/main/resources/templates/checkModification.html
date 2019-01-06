@@ -75,7 +75,7 @@
                         <div class="col-md-4"><h4>手机:[[${student.phone}]]</h4></div>
                     </div>
                     <div class="row">
-                        <a class="btn btn-danger" th:href="'/close/'+${student.studentEmail}"  style="float: left; margin-left: 10px;">
+                        <a class="btn btn-danger" onclick="confirmFunc()"  style="float: left; margin-left: 10px;">
                             将学生移入历史列表
                         </a>
                     </div>
@@ -116,13 +116,25 @@
 <!-- JQUERY SCRIPTS -->
 <script src="/js/jquery-1.10.2.js"></script>
 <!-- BOOTSTRAP SCRIPTS -->
-<script src="/js/bootstrap.js"></script>
+<!--<script src="/js/bootstrap.js"></script>-->
 <!-- METISMENU SCRIPTS -->
 <script src="/js/jquery.metisMenu.js"></script>
 <!-- CUSTOM SCRIPTS -->
-<script src="/js/custom.js"></script>
+<!--<script src="/js/custom.js"></script>-->
 <!--<script src="/js/easyui.js"></script>-->
 <script src="/js/jquery-latest.js"></script>
+
+<script>
+    function confirmFunc() {
+        var bool = window.confirm('确定将该学生移入历史学生列表吗?');
+        if (bool) {
+            window.location.href = "/close/[[${student.studentEmail}]]";
+        } else {
+            window.location.href = "/paperInfo/[[${student.studentEmail}]]";
+        }
+    }
+
+</script>
 
 
 </body>
