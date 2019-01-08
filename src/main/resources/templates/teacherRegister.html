@@ -136,10 +136,12 @@
         $('#email').bind('input propertychange', function (e) {
             if(!(/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/.test(e.target.value))) {
                 $('.false-input-email')[0].innerText = '请输入正确的邮箱地址'
+                $(".false-input-email").addClass("red")
                 $("#submit").attr("disabled","disabled")
             }
             else {
                 $('.false-input-email')[0].innerText = null
+                $(".false-input-email").removeClass("red")
                 $("#submit").removeAttr("disabled")
             }
         })
