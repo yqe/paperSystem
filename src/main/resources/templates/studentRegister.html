@@ -123,10 +123,10 @@
                 $('.false-input-password')[0].innerText = '密码应不小于六位'
                 $("#submit").attr("disabled","disabled")
             }
-            else if(e.target.value !== $('#repassword')[0].value){
-                $('.false-input-password')[0].innerText = '请输入正确密码'
-                $("#submit").attr("disabled","disabled")
-            }
+//            else if(e.target.value !== $('#repassword')[0].value){
+//                $('.false-input-password')[0].innerText = '请输入正确密码'
+//                $("#submit").attr("disabled","disabled")
+//            }
             else {
                 $('.false-input-password')[0].innerText = null
                 $("#submit").removeAttr("disabled")
