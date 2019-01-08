@@ -50,6 +50,7 @@
                             <input type="email" class="form-control" id="email" name="email">
                         </div>
                     </div>
+                    <div class="false-input-email"></div>
                     <div class="form-group">
                         <label for="password" class="col-sm-2 control-label">密码</label>
                         <div class="col-sm-6">
@@ -131,6 +132,18 @@
                 $("#submit").removeAttr("disabled")
             }
         })
+
+        $('#email').bind('input propertychange', function (e) {
+            if(!(/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/.test(e.target.value))) {
+                $('.false-input-email')[0].innerText = '请输入正确的邮箱地址'
+                $("#submit").attr("disabled","disabled")
+            }
+            else {
+                $('.false-input-email')[0].innerText = null
+                $("#submit").removeAttr("disabled")
+            }
+        })
+
     });
 
 
