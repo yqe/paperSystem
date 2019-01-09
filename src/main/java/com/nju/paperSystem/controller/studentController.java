@@ -76,6 +76,10 @@ public class studentController {
             model.addAttribute("error","该邮箱已存在，请重新注册！");
             return "studentRegister";
         }
+        if(teacherService.getTeacherByEmail(request.getParameter("teacherEmail")) == null){
+            model.addAttribute("error","不存在该导师邮箱，请重新注册！");
+            return "studentRegister";
+        }
         student student = new student();
         student.setStudentEmail(request.getParameter("email"));
         student.setStudentName(request.getParameter("name"));
