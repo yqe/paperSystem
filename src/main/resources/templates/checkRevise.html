@@ -120,6 +120,26 @@
 <!--<script src="/js/easyui.js"></script>-->
 <script src="/js/jquery-latest.js"></script>
 
+<script th:inline="javascript">
+    var state = [[${state}]];
+    if(state!=null){
+        swal({
+            title : "温馨提示",
+            text : state
+        });
+    }
+</script>
+
+<script  th:inline="javascript">
+    var warning = [[${warning}]];
+    if(warning!=null){
+        swal({
+            title : "温馨提示",
+            text : warning
+        });
+    }
+</script>
+
 
 </body>
 </html>

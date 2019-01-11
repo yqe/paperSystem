@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -110,6 +111,12 @@ public class teacherController {
         HttpSession session = request.getSession();
         teacher teacher = teacherService.getTeacherByEmail(session.getAttribute("email").toString());
         List<modification> modificationList = modificationService.getAllModificationByStudentEmail(studentEmail);
+        String warning = request.getParameter("warning");
+        String messeage = request.getParameter("message");
+        if(warning != null)
+            model.addAttribute("warning",warning);
+        if(messeage != null)
+            model.addAttribute("state",messeage);
         model.addAttribute("teacher", teacher);
         model.addAttribute("student",studentService.getStudentByEmail(studentEmail));
         model.addAttribute("modificationList",modificationList);
@@ -147,16 +154,27 @@ public class teacherController {
     }
 
     @RequestMapping(value = "/reviseUpload",method = RequestMethod.POST)
-    public String reviseUpload(@RequestParam("file") MultipartFile file, Model model, HttpServletRequest request) throws IOException, MessagingException {
+    public ModelAndView reviseUpload(@RequestParam("file") MultipartFile file, Model model, HttpServletRequest request) throws IOException, MessagingException {
         int id = Integer.valueOf(request.getParameter("id"));
         String studentEmail = modificationService.getModificationById(id).getStudentEmail();
+        ModelAndView view = new ModelAndView("redirect:paperInfo/"+studentEmail);
+        if(file.isEmpty()){
+            view.addObject("warning","请选择上传文件");
+            return view;
+        }
         student student = studentService.getStudentByEmail(studentEmail);
         modification modification = modificationService.getModificationById(id);
         //更新教师意见和修改的论文
         modification.setTeacherAdvice(request.getParameter("advice"));
-        modificationService.upload(file, student, modification,1);
+        String state = modificationService.upload(file, student, modification,1);
         mailService.sendReviseEmail(student, modification);
-        return "redirect:paperInfo/"+studentEmail;
+
+        if(state.equals("上传成功"))
+            view.addObject("message","提交成功");
+        else
+            view.addObject("message","提交失败");
+
+        return view;
     }
 
     @RequestMapping(value="/close/{studentEmail}",method = RequestMethod.GET)

@@ -115,8 +115,11 @@ public class studentController {
     public String paperUpload(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         student student = studentService.getStudentByEmail((session.getAttribute("email")).toString());
+        String warning = request.getParameter("warning");
         String messeage = request.getParameter("message");
         List<modification> modificationList = modificationService.getAllModificationByStudentEmail(student.getStudentEmail());
+        if(warning != null)
+            model.addAttribute("warning",warning);
         if(messeage != null)
             model.addAttribute("state",messeage);
         model.addAttribute("student",student);
@@ -130,6 +133,10 @@ public class studentController {
         HttpSession session = request.getSession();
         student student = studentService.getStudentByEmail((session.getAttribute("email")).toString());
         ModelAndView view = new ModelAndView("redirect:paperUpload");
+        if(file.isEmpty()){
+            view.addObject("warning","请选择上传文件");
+            return view;
+        }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date=new Date();
