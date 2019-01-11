@@ -5,16 +5,20 @@
 body {
     font-family: 'Open Sans', sans-serif;
     line-height:25px;
+    height: 100%;
 }
-
+html {
+    height: 100%;
+}
 #wrapper {
     width: 100%;
+    height: calc(100% - 65px);
     background: #202020;
 }
 
 #page-wrapper {
     padding: 15px 15px;
-    min-height: 600px;
+    height: 100%;
     background: #F3F3F3;
 }
 
@@ -23,7 +27,7 @@ body {
     margin: 10px 20px 10px 0px;
     background-color: #fff!important;
     padding: 10px;
-    min-height: 1200px;
+    height: 100%;
 }
 
 .page-head-line {
@@ -231,7 +235,7 @@ body {
     #page-wrapper {
         margin: 0 0 0 260px;
         padding: 15px 30px;
-        min-height: 1200px;
+        height: 100%;
     }
 
 
