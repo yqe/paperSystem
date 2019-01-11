@@ -45,7 +45,7 @@ public class teacherController {
     public String addTeacher(Model model,HttpServletRequest request){
         String email = request.getParameter("email");
         if(teacherService.getTeacherByEmail(email) != null){
-            model.addAttribute("error","该工号已存在，请重新注册！");
+            model.addAttribute("error","该邮箱已存在，请重新注册！");
             return "teacherRegister";
         }
         teacher teacher = new teacher();
