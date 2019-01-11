@@ -157,7 +157,7 @@ public class studentController {
         String state = modificationService.upload(file, student, modification,0);
         studentService.update(student);
         modificationService.insert(modification);
-        // 邮件发送
+//        // 邮件发送
         mailService.sendEmail(student, modification);
 
         if(state.equals("上传成功"))
