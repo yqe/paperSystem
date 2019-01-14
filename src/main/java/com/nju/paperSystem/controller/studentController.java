@@ -35,17 +35,26 @@ public class studentController {
     teacherService teacherService;
 
     @RequestMapping(value="/",method = RequestMethod.GET)
-    public String index(){
+    public String index(Model model, HttpServletRequest request){
+        String message = request.getParameter("message");
+        if(message != null)
+            model.addAttribute("message",message);
         return "login";
     }
 
     @RequestMapping(value="/index",method = RequestMethod.GET)
-    public String login(){
+    public String login(Model model, HttpServletRequest request){
+        String message = request.getParameter("message");
+        if(message != null)
+            model.addAttribute("message",message);
         return "login";
     }
 
     @RequestMapping(value="/studentRegister",method = RequestMethod.GET)
-    public String studentRegister(){
+    public String studentRegister(Model model, HttpServletRequest request){
+        String error = request.getParameter("error");
+        if(error != null)
+            model.addAttribute("error",error);
         return "studentRegister";
     }
 
@@ -69,16 +78,16 @@ public class studentController {
     }
 
     @RequestMapping(value="/addStudent",method = RequestMethod.POST)
-    public String addStudent(Model model,HttpServletRequest request){
+    public ModelAndView addStudent(Model model,HttpServletRequest request){
         String email = request.getParameter("email");
+        ModelAndView view = new ModelAndView("redirect:studentRegister");
         if(studentService.getStudentByEmail(email) != null){
-            System.out.println(email);
-            model.addAttribute("error","该邮箱已存在，请重新注册！");
-            return "studentRegister";
+            view.addObject("error","该邮箱已存在，请重新注册！");
+            return view;
         }
         if(teacherService.getTeacherByEmail(request.getParameter("teacherEmail")) == null){
-            model.addAttribute("error","不存在该导师邮箱，请重新注册！");
-            return "studentRegister";
+            view.addObject("error","不存在该导师邮箱，请重新注册！");
+            return view;
         }
         student student = new student();
         student.setStudentEmail(request.getParameter("email"));
@@ -89,13 +98,21 @@ public class studentController {
         student.setDegree(request.getParameter("degree"));
         student.setState(0);
         studentService.insert(student);
-        return "redirect:/index";
+        view =  new ModelAndView("redirect:index");
+        view.addObject("message","注册成功！");
+        return view;
     }
 
     @RequestMapping(value = "/studentInfo",method = RequestMethod.GET)
     public String studentInfo(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         student student=studentService.getStudentByEmail(session.getAttribute("email").toString());
+        String warning = request.getParameter("warning");
+        String message = request.getParameter("message");
+        if(warning != null)
+            model.addAttribute("warning",warning);
+        if(message != null)
+            model.addAttribute("message",message);
         model.addAttribute("student",student);
         return "studentInfoUpdate";
     }
@@ -103,12 +120,18 @@ public class studentController {
     @RequestMapping(value = "/studentInfoUpdate",method = RequestMethod.POST)
     public ModelAndView studentInfoUpdate(HttpServletRequest request) {
         String email = request.getParameter("studentEmail");
+        ModelAndView view = new ModelAndView("redirect:studentInfo");
+        if(teacherService.getTeacherByEmail(request.getParameter("teacherEmail")) == null){
+            view.addObject("warning","不存在该导师邮箱！");
+            return view;
+        }
         student student = studentService.getStudentByEmail(email);
         student.setPhone(request.getParameter("phone"));
         student.setStudentName(request.getParameter("studentName"));
         student.setTeacherEmail(request.getParameter("teacherEmail"));
         studentService.update(student);
-        return new ModelAndView("redirect:/studentInfo");
+        view.addObject("message","修改成功！");
+        return view;
     }
 
     @RequestMapping(value = "/paperUpload",method = RequestMethod.GET)
