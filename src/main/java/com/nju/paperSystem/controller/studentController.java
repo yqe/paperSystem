@@ -16,8 +16,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -147,7 +149,6 @@ public class studentController {
             model.addAttribute("state",messeage);
         model.addAttribute("student",student);
         model.addAttribute("modificationList",modificationList);
-
         return "paperUpload";
     }
 
@@ -189,6 +190,19 @@ public class studentController {
             view.addObject("message","提交失败");
 
         return view;
+    }
+
+    @RequestMapping(value = "/paperDownloadStudent/{id}",method = RequestMethod.GET)
+    public String paperDownloadStudent(@PathVariable("id")int id, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        modification modification = modificationService.getModificationById(id);
+        modificationService.download(request, response,modificationService.getModificationById(modification.getId()),0);
+        return "redirect:/paperUpload";
+    }
+
+    @RequestMapping(value = "/teacherVersionDownloadStudent/{id}",method = RequestMethod.GET)
+    public String teacherVersionDownloadStudent(@PathVariable("id")int id, Model model, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        modificationService.download(request, response,modificationService.getModificationById(id),1);
+        return "redirect:/paperUpload";
     }
 
 

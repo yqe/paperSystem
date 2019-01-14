@@ -55,7 +55,7 @@ public class emailConfig {
         String receivers[] = receiver.split(";");
         // "E://aim//"+studentEmail+"//"+fileName;;//本地路径
         // "//home//ubuntu//web//papersystem//"+studentEmail+"//"+fileName;//服务器路径
-        String filepath = "//home//ubuntu//web//papersystem//"+studentEmail+"//"+fileName;
+        String filepath = "E://aim//"+studentEmail+"//"+fileName;;//本地路径
         MimeMessage mimMessage = getMailSender().createMimeMessage();
         try {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimMessage, true, "utf-8");

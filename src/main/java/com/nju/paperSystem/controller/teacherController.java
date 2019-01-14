@@ -111,12 +111,10 @@ public class teacherController {
         HttpSession session = request.getSession();
         teacher teacher = teacherService.getTeacherByEmail(session.getAttribute("email").toString());
         List<modification> modificationList = modificationService.getAllModificationByStudentEmail(studentEmail);
-        String warning = request.getParameter("warning");
-        String messeage = request.getParameter("message");
-        if(warning != null)
-            model.addAttribute("warning",warning);
-        if(messeage != null)
-            model.addAttribute("state",messeage);
+        String message = request.getParameter("message");
+        System.out.println(message);
+        if(message != null)
+            model.addAttribute("message",message);
         model.addAttribute("teacher", teacher);
         model.addAttribute("student",studentService.getStudentByEmail(studentEmail));
         model.addAttribute("modificationList",modificationList);
@@ -134,19 +132,23 @@ public class teacherController {
     public String paperDownload(@PathVariable("id")int id, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         modification modification = modificationService.getModificationById(id);
         modificationService.download(request, response,modificationService.getModificationById(modification.getId()),0);
-        return "redirect:/checkStudent";
+        return "redirect:/paperInfo/"+modification.getStudentEmail();
     }
 
     @RequestMapping(value = "/teacherVersionDownload/{id}",method = RequestMethod.GET)
     public String teacherVersionDownload(@PathVariable("id")int id, Model model, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        modification modification = modificationService.getModificationById(id);
         modificationService.download(request, response,modificationService.getModificationById(id),1);
-        return "redirect:/checkStudent";
+        return "redirect:/paperInfo/"+modification.getStudentEmail();
     }
 
     @RequestMapping(value = "/paperRevise/{id}",method = RequestMethod.GET)
     public String paperRevise(@PathVariable("id")int id, Model model, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         HttpSession session = request.getSession();
         teacher teacher = teacherService.getTeacherByEmail(session.getAttribute("email").toString());
+        String warning = request.getParameter("warning");
+        if(warning != null)
+            model.addAttribute("warning",warning);
         model.addAttribute("teacher", teacher);
         model.addAttribute("studentEmail",modificationService.getModificationById(id).getStudentEmail());
         model.addAttribute("id", id);
@@ -157,7 +159,7 @@ public class teacherController {
     public ModelAndView reviseUpload(@RequestParam("file") MultipartFile file, Model model, HttpServletRequest request) throws IOException, MessagingException {
         int id = Integer.valueOf(request.getParameter("id"));
         String studentEmail = modificationService.getModificationById(id).getStudentEmail();
-        ModelAndView view = new ModelAndView("redirect:paperInfo/"+studentEmail);
+        ModelAndView view = new ModelAndView("redirect:paperRevise/"+id);
         if(file.isEmpty()){
             view.addObject("warning","请选择上传文件");
             return view;
@@ -169,6 +171,7 @@ public class teacherController {
         String state = modificationService.upload(file, student, modification,1);
         mailService.sendReviseEmail(student, modification);
 
+         view = new ModelAndView("redirect:paperInfo/"+studentEmail);
         if(state.equals("上传成功"))
             view.addObject("message","提交成功");
         else

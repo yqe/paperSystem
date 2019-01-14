@@ -68,7 +68,7 @@ public class modificationServiceImpl implements modificationService {
             // 设置文件存储路径
             // "E://aim//"+student.getStudentEmail()+"//";//本地路径
             // "//home//ubuntu//web//papersystem//"+student.getStudentEmail()+"//";//服务器路径
-            String filePath = "//home//ubuntu//web//papersystem//"+student.getStudentEmail()+"//";
+            String filePath = "E://aim//"+student.getStudentEmail()+"//";//本地路径
             String path = filePath + fileName;
             File dest = new File(path);
             // 检测是否存在目录
@@ -98,7 +98,7 @@ public class modificationServiceImpl implements modificationService {
             //设置文件路径
             // "E://aim//"+modification.getStudentEmail()+"//";
             // "//home//ubuntu//web//papersystem//"+modification.getStudentEmail()+"//";
-            String realPath = "//home//ubuntu//web//papersystem//"+modification.getStudentEmail()+"//";
+            String realPath = "E://aim//"+modification.getStudentEmail()+"//";
             File file = new File(realPath , fileName);
             if (file.exists()) {
                 response.setContentType("application/force-download");// 设置强制下载不打开
