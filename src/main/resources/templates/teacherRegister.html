@@ -44,6 +44,7 @@
                             <input type="text" class="form-control" id="name" name="name">
                         </div>
                     </div>
+                    <div class="false-input-name"></div>
                     <div class="form-group">
                         <label for="email" class="col-sm-2 control-label">邮箱</label>
                         <div class="col-sm-6">
@@ -101,51 +102,64 @@
 
 <script>
     $(document).ready(function() {
-        $('#password').bind('input propertychange', function (e) {
-            if(!e.target.value || e.target.value.length < 6){
-                $('.false-input-password')[0].innerText = '密码应不小于六位'
-                $(".false-input-password").addClass("red")
-                $("#submit").attr("disabled","disabled")
-            }
-            // else if(e.target.value !== $('#repassword')[0].value){
-            //     $('.false-input-password')[0].innerText = '请输入正确密码'
-            //     $(".false-input-password").addClass("red")
-            //     $("#submit").attr("disabled","disabled")
-            // }
-            else {
-                $('.false-input-password')[0].innerText = null
-                $(".false-input-password").removeClass("red")
-                $("#submit").removeAttr("disabled")
-            }
+            $('#name').bind('input propertychange', function (e) {
+                if(!e.target.value) {
+                    $('.false-input-name')[0].innerText = '姓名不能为空'
+                    $(".false-input-name").addClass("red")
+                    $("#submit").attr("disabled","disabled")
+                    e.stopPropagation()
+                }
+                else {
+                    $('.false-input-name')[0].innerText = null
+                    $(".false-input-name").removeClass("red")
+                    $("#submit").removeAttr("disabled")
+                }
+            })
 
-        })
+            $('#password').bind('input propertychange', function (e) {
+                if(!e.target.value || e.target.value.length < 6){
+                    $('.false-input-password')[0].innerText = '密码应不小于六位'
+                    $(".false-input-password").addClass("red")
+                    $("#submit").attr("disabled","disabled")
+                }
+                // else if(e.target.value !== $('#repassword')[0].value){
+                //     $('.false-input-password')[0].innerText = '请输入正确密码'
+                //     $(".false-input-password").addClass("red")
+                //     $("#submit").attr("disabled","disabled")
+                // }
+                else {
+                    $('.false-input-password')[0].innerText = null
+                    $(".false-input-password").removeClass("red")
+                    $("#submit").removeAttr("disabled")
+                }
 
-        $('#repassword').bind('input propertychange', function (e) {
-            if(e.target.value !== $('#password')[0].value) {
-                $('.false-input-repassword')[0].innerText = '确认密码必须与第一次所填相同'
-                $(".false-input-repassword").addClass("red")
-                $("#submit").attr("disabled","disabled")
-            }
-            else {
-                $('.false-input-repassword')[0].innerText = null
-                $(".false-input-repassword").removeClass("red")
-                $("#submit").removeAttr("disabled")
-            }
-        })
+            })
 
-        $('#email').bind('input propertychange', function (e) {
-            if(!(/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/.test(e.target.value))) {
-                $('.false-input-email')[0].innerText = '请输入正确的邮箱地址'
-                $(".false-input-email").addClass("red")
-                $("#submit").attr("disabled","disabled")
-            }
-            else {
-                $('.false-input-email')[0].innerText = null
-                $(".false-input-email").removeClass("red")
-                $("#submit").removeAttr("disabled")
-            }
-        })
+            $('#repassword').bind('input propertychange', function (e) {
+                if(e.target.value !== $('#password')[0].value) {
+                    $('.false-input-repassword')[0].innerText = '确认密码必须与第一次所填相同'
+                    $(".false-input-repassword").addClass("red")
+                    $("#submit").attr("disabled","disabled")
+                }
+                else {
+                    $('.false-input-repassword')[0].innerText = null
+                    $(".false-input-repassword").removeClass("red")
+                    $("#submit").removeAttr("disabled")
+                }
+            })
 
+            $('#email').bind('input propertychange', function (e) {
+                if(!(/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/.test(e.target.value))) {
+                    $('.false-input-email')[0].innerText = '请输入正确的邮箱地址'
+                    $(".false-input-email").addClass("red")
+                    $("#submit").attr("disabled","disabled")
+                }
+                else {
+                    $('.false-input-email')[0].innerText = null
+                    $(".false-input-email").removeClass("red")
+                    $("#submit").removeAttr("disabled")
+                }
+            })
     });
 
 

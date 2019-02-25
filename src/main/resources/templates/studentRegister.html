@@ -91,7 +91,7 @@
                     <div class="false-input-repassword"></div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-default">注册</button>
+                            <button type="submit" class="btn btn-default" id="submit">注册</button>
                             &nbsp &nbsp &nbsp
                             <a class="btn btn-primary" th:href="@{/index}">返回登录页面</a>
                         </div>
@@ -124,6 +124,19 @@
 </script>
 <script>
     $(document).ready(function() {
+        $('#name').bind('input propertychange', function (e) {
+            if(!e.target.value) {
+                $('.false-input-name')[0].innerText = '姓名不能为空'
+                $(".false-input-name").addClass("red")
+                $("#submit").attr("disabled","disabled")
+            }
+            else {
+                $('.false-input-name')[0].innerText = null
+                $(".false-input-name").removeClass("red")
+                $("#submit").removeAttr("disabled")
+            }
+        })
+
         $('#password').bind('input propertychange', function (e) {
             if(!e.target.value || e.target.value.length < 6){
                 $('.false-input-password')[0].innerText = '密码应不小于六位'
@@ -144,6 +157,7 @@
 
         $('#repassword').bind('input propertychange', function (e) {
             if(e.target.value !== $('#password')[0].value) {
+                console.log(e.target.value,$('#password')[0].value)
                 $('.false-input-repassword')[0].innerText = '确认密码必须与第一次所填相同'
                 $(".false-input-repassword").addClass("red")
                 $("#submit").attr("disabled","disabled")
