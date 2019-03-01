@@ -43,18 +43,21 @@ public class teacherController {
     }
 
     @RequestMapping(value="/addTeacher",method = RequestMethod.POST)
-    public String addTeacher(Model model,HttpServletRequest request){
+    public ModelAndView addTeacher(Model model,HttpServletRequest request){
+        ModelAndView view = new ModelAndView("redirect:teacherRegister");
         String email = request.getParameter("email");
         if(teacherService.getTeacherByEmail(email) != null){
             model.addAttribute("error","该邮箱已存在，请重新注册！");
-            return "teacherRegister";
+            return view;
         }
         teacher teacher = new teacher();
         teacher.setEmail(request.getParameter("email"));
         teacher.setName(request.getParameter("name"));
         teacher.setPassword(request.getParameter("password"));
         teacherService.insert(teacher);
-        return "redirect:index";
+        view =  new ModelAndView("redirect:index");
+        view.addObject("message","注册成功！");
+        return view;
     }
 
     @RequestMapping(value="/teacherLogin",method = RequestMethod.POST)

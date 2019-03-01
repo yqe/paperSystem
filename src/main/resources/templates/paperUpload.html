@@ -26,17 +26,23 @@
 
     <style type="text/css">
         .form-horizontal{
-            margin-left: 7%;
+            margin-left: 5%;
         }
         .form-horizontal .row{
-            margin-left: 5%;
-            width: 40%;
+            /*margin-left: 5%;*/
+            width: 50%;
         }
         .form-horizontal button{
             margin-right: 20px;
         }
         #main-menu h5{
             color: #aaaaaa;
+        }
+        .form-group{
+            width: 80%;
+        }
+        .formRow{
+            margin-left: 15px;
         }
     </style>
 </head>
@@ -75,7 +81,8 @@
                     <form class="form-horizontal" th:action="@{/paperModification}" ENCTYPE="multipart/form-data" method="post">
                         <div class="row">
                             <div class="form-group">
-                                <label for="file">选择文件</label>
+                                <div class="formRow">
+                                    <label for="file">选择文件</label>
                                     <div id="file" class="fileupload fileupload-new" data-provides="fileupload">
                                                             <span class="btn btn-file btn-default">
                                                                 <span class="fileupload-new">选择</span>
@@ -85,17 +92,25 @@
                                         <span class="fileupload-preview"></span>
                                         <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
                                     </div>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="summary">修改概要</label>
-                                <input type="text" class="form-control" name="summary" id="summary" />
+                                <div class="formRow">
+                                    <label for="summary">修改概要</label>
+                                    <input type="text" class="form-control" name="summary" id="summary" />
+                                </div>
+
                             </div>
                             <div class="form-group">
-                                <label for="description">具体说明</label>
-                                <textarea class="form-control" rows="5" name="description" id="description"></textarea>
+                                <div class="formRow">
+                                    <label for="description">具体说明</label>
+                                    <textarea class="form-control" rows="5" name="description" id="description"></textarea>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-default">提交</button>
+                                <div class="formRow">
+                                    <button type="submit" class="btn btn-default">提交</button>
+                                </div>
                             </div>
                         </div>
                     </form>
