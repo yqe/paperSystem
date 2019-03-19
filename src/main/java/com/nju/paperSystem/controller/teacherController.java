@@ -132,17 +132,15 @@ public class teacherController {
     }
 
     @RequestMapping(value = "/paperDownload/{id}",method = RequestMethod.GET)
-    public String paperDownload(@PathVariable("id")int id, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+    public void paperDownload(@PathVariable("id")int id, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         modification modification = modificationService.getModificationById(id);
         modificationService.download(request, response,modificationService.getModificationById(modification.getId()),0);
-        return "redirect:/paperInfo/"+modification.getStudentEmail();
     }
 
     @RequestMapping(value = "/teacherVersionDownload/{id}",method = RequestMethod.GET)
-    public String teacherVersionDownload(@PathVariable("id")int id, Model model, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+    public void teacherVersionDownload(@PathVariable("id")int id, Model model, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         modification modification = modificationService.getModificationById(id);
         modificationService.download(request, response,modificationService.getModificationById(id),1);
-        return "redirect:/paperInfo/"+modification.getStudentEmail();
     }
 
     @RequestMapping(value = "/paperRevise/{id}",method = RequestMethod.GET)
@@ -150,10 +148,12 @@ public class teacherController {
         HttpSession session = request.getSession();
         teacher teacher = teacherService.getTeacherByEmail(session.getAttribute("email").toString());
         String warning = request.getParameter("warning");
+        modification modification = modificationService.getModificationById(id);
         if(warning != null)
             model.addAttribute("warning",warning);
         model.addAttribute("teacher", teacher);
         model.addAttribute("studentEmail",modificationService.getModificationById(id).getStudentEmail());
+        model.addAttribute("modification",modification);
         model.addAttribute("id", id);
         return "checkRevise";
     }

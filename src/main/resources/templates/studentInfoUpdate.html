@@ -126,17 +126,17 @@
 
 <script th:inline="javascript">
     var warning = [[${warning}]];
-    var state = [[${state}]];
+    var message = [[${message}]];
     if(warning!=null){
         swal({
             title : "温馨提示",
             text : warning
         });
     }
-    if(state!=null){
+    if(message!=null){
         swal({
             title : "温馨提示",
-            text : state
+            text : message
         });
     }
 </script>

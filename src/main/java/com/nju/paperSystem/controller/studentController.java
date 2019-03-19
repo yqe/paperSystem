@@ -36,59 +36,58 @@ public class studentController {
     @Autowired
     teacherService teacherService;
 
-    @RequestMapping(value="/",method = RequestMethod.GET)
-    public String index(Model model, HttpServletRequest request){
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String index(Model model, HttpServletRequest request) {
         String message = request.getParameter("message");
-        if(message != null)
-            model.addAttribute("message",message);
+        if (message != null)
+            model.addAttribute("message", message);
         return "login";
     }
 
-    @RequestMapping(value="/index",method = RequestMethod.GET)
-    public String login(Model model, HttpServletRequest request){
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public String login(Model model, HttpServletRequest request) {
         String message = request.getParameter("message");
-        if(message != null)
-            model.addAttribute("message",message);
+        if (message != null)
+            model.addAttribute("message", message);
         return "login";
     }
 
-    @RequestMapping(value="/studentRegister",method = RequestMethod.GET)
-    public String studentRegister(Model model, HttpServletRequest request){
+    @RequestMapping(value = "/studentRegister", method = RequestMethod.GET)
+    public String studentRegister(Model model, HttpServletRequest request) {
         String error = request.getParameter("error");
-        if(error != null)
-            model.addAttribute("error",error);
+        if (error != null)
+            model.addAttribute("error", error);
         return "studentRegister";
     }
 
-    @RequestMapping(value="/studentLogin",method = RequestMethod.POST)
-    public String studentLogin(Model model, HttpServletRequest request){
+    @RequestMapping(value = "/studentLogin", method = RequestMethod.POST)
+    public String studentLogin(Model model, HttpServletRequest request) {
         String email = request.getParameter("studentEmail");
         String password = request.getParameter("studentPassword");
-        if(studentService.getStudentByEmail(email) == null){
+        if (studentService.getStudentByEmail(email) == null) {
             model.addAttribute("error", "账号不存在！");
             return "login";
         }
-        if(studentService.login(email, password)){
+        if (studentService.login(email, password)) {
             HttpSession session = request.getSession();
             session.setAttribute("email", email);
             return "redirect:paperUpload";
-        }
-        else{
+        } else {
             model.addAttribute("error", "密码错误，请重新登录！");
             return "login";
         }
     }
 
-    @RequestMapping(value="/addStudent",method = RequestMethod.POST)
-    public ModelAndView addStudent(Model model,HttpServletRequest request){
+    @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
+    public ModelAndView addStudent(Model model, HttpServletRequest request) {
         String email = request.getParameter("email");
         ModelAndView view = new ModelAndView("redirect:studentRegister");
-        if(studentService.getStudentByEmail(email) != null){
-            view.addObject("error","该邮箱已存在，请重新注册！");
+        if (studentService.getStudentByEmail(email) != null) {
+            view.addObject("error", "该邮箱已存在，请重新注册！");
             return view;
         }
-        if(teacherService.getTeacherByEmail(request.getParameter("teacherEmail")) == null){
-            view.addObject("error","不存在该导师邮箱，请重新注册！");
+        if (teacherService.getTeacherByEmail(request.getParameter("teacherEmail")) == null) {
+            view.addObject("error", "不存在该导师邮箱，请重新注册！");
             return view;
         }
         student student = new student();
@@ -100,31 +99,31 @@ public class studentController {
         student.setDegree(request.getParameter("degree"));
         student.setState(0);
         studentService.insert(student);
-        view =  new ModelAndView("redirect:index");
-        view.addObject("message","注册成功！");
+        view = new ModelAndView("redirect:index");
+        view.addObject("message", "注册成功！");
         return view;
     }
 
-    @RequestMapping(value = "/studentInfo",method = RequestMethod.GET)
+    @RequestMapping(value = "/studentInfo", method = RequestMethod.GET)
     public String studentInfo(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        student student=studentService.getStudentByEmail(session.getAttribute("email").toString());
+        student student = studentService.getStudentByEmail(session.getAttribute("email").toString());
         String warning = request.getParameter("warning");
         String message = request.getParameter("message");
-        if(warning != null)
-            model.addAttribute("warning",warning);
-        if(message != null)
-            model.addAttribute("message",message);
-        model.addAttribute("student",student);
+        if (warning != null)
+            model.addAttribute("warning", warning);
+        if (message != null)
+            model.addAttribute("message", message);
+        model.addAttribute("student", student);
         return "studentInfoUpdate";
     }
 
-    @RequestMapping(value = "/studentInfoUpdate",method = RequestMethod.POST)
+    @RequestMapping(value = "/studentInfoUpdate", method = RequestMethod.POST)
     public ModelAndView studentInfoUpdate(HttpServletRequest request) {
         String email = request.getParameter("studentEmail");
         ModelAndView view = new ModelAndView("redirect:studentInfo");
-        if(teacherService.getTeacherByEmail(request.getParameter("teacherEmail")) == null){
-            view.addObject("warning","不存在该导师邮箱！");
+        if (teacherService.getTeacherByEmail(request.getParameter("teacherEmail")) == null) {
+            view.addObject("warning", "不存在该导师邮箱！");
             return view;
         }
         student student = studentService.getStudentByEmail(email);
@@ -132,44 +131,56 @@ public class studentController {
         student.setStudentName(request.getParameter("studentName"));
         student.setTeacherEmail(request.getParameter("teacherEmail"));
         studentService.update(student);
-        view.addObject("message","修改成功！");
+        view.addObject("message", "修改成功！");
         return view;
     }
 
-    @RequestMapping(value = "/paperUpload",method = RequestMethod.GET)
+    @RequestMapping(value = "/paperUpload", method = RequestMethod.GET)
     public String paperUpload(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         student student = studentService.getStudentByEmail((session.getAttribute("email")).toString());
         String warning = request.getParameter("warning");
         String messeage = request.getParameter("message");
         List<modification> modificationList = modificationService.getAllModificationByStudentEmail(student.getStudentEmail());
-        if(warning != null)
-            model.addAttribute("warning",warning);
-        if(messeage != null)
-            model.addAttribute("state",messeage);
-        model.addAttribute("student",student);
-        model.addAttribute("modificationList",modificationList);
+        if (warning != null)
+            model.addAttribute("warning", warning);
+        if (messeage != null)
+            model.addAttribute("state", messeage);
+        model.addAttribute("student", student);
+        model.addAttribute("modificationList", modificationList);
         return "paperUpload";
     }
 
-    @RequestMapping(value = "/paperModification",method = RequestMethod.POST)
-    public ModelAndView paperModification(@RequestParam("file") MultipartFile file,Model model, HttpServletRequest request) throws MessagingException, IOException {
+    @RequestMapping(value = "/paperReUpload/{modificationId}", method = RequestMethod.GET)
+    public String paperReUpload(@PathVariable("modificationId") int modificationId, Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        student student = studentService.getStudentByEmail((session.getAttribute("email")).toString());
+        modification modification = modificationService.getModificationById(modificationId);
+        String warning = request.getParameter("warning");
+        if (warning != null)
+            model.addAttribute("warning", warning);
+        model.addAttribute("student", student);
+        model.addAttribute("modification", modification);
+        return "studentReUpload";
+    }
+
+    @RequestMapping(value = "/paperModification", method = RequestMethod.POST)
+    public ModelAndView paperModification(@RequestParam("file") MultipartFile file, Model model, HttpServletRequest request) throws MessagingException, IOException {
         HttpSession session = request.getSession();
         student student = studentService.getStudentByEmail((session.getAttribute("email")).toString());
         ModelAndView view = new ModelAndView("redirect:paperUpload");
-        if(file.isEmpty()){
-            view.addObject("warning","请选择上传文件");
+        if (file.isEmpty()) {
+            view.addObject("warning", "请选择上传文件");
             return view;
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date=new Date();
+        Date date = new Date();
         modification modification = new modification();
         List<modification> modificationList = modificationService.getModificationListByVersion(student.getStudentEmail());
-        if(modificationList.size()>0){
-            modification.setVersion(modificationList.get(0).getVersion()+1);
-        }
-        else{
+        if (modificationList.size() > 0) {
+            modification.setVersion(modificationList.get(0).getVersion() + 1);
+        } else {
             modification.setVersion(1);
         }
         modification.setStudentEmail(student.getStudentEmail());
@@ -178,31 +189,61 @@ public class studentController {
         modification.setDate(sdf.format(date));
         student.setLastCommit(sdf.format(date));
         // 上传文件
-        String state = modificationService.upload(file, student, modification,0);
+        String state = modificationService.upload(file, student, modification, 0);
         studentService.update(student);
-        modificationService.insert(modification);
 //        // 邮件发送
         mailService.sendEmail(student, modification);
 
-        if(state.equals("上传成功"))
-            view.addObject("message","提交成功");
+        if (state.equals("上传成功")){
+            view.addObject("message", "提交成功");
+            modificationService.insert(modification);}
         else
-            view.addObject("message","提交失败");
+            view.addObject("message", "提交失败");
 
         return view;
     }
 
-    @RequestMapping(value = "/paperDownloadStudent/{id}",method = RequestMethod.GET)
-    public String paperDownloadStudent(@PathVariable("id")int id, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+    @RequestMapping(value = "/paperReModification", method = RequestMethod.POST)
+    public ModelAndView paperReModification(@RequestParam("file") MultipartFile file, Model model, HttpServletRequest request) throws MessagingException, IOException {
+        HttpSession session = request.getSession();
+        student student = studentService.getStudentByEmail((session.getAttribute("email")).toString());
+        int id = Integer.valueOf(request.getParameter("modificationId"));
+        ModelAndView view = new ModelAndView("redirect:paperReUpload/" + id);
+        if (file.isEmpty()) {
+            view.addObject("warning", "请选择上传文件");
+            return view;
+        }
+        view = new ModelAndView("redirect:paperUpload");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
         modification modification = modificationService.getModificationById(id);
-        modificationService.download(request, response,modificationService.getModificationById(modification.getId()),0);
-        return "redirect:/paperUpload";
+        modification.setSummary(request.getParameter("summary"));
+        modification.setDescription(request.getParameter("description"));
+        modification.setDate(sdf.format(date));
+        student.setLastCommit(sdf.format(date));
+        // 上传文件
+        String state = modificationService.upload(file, student, modification, 0);
+        studentService.update(student);
+        modificationService.update(modification);
+//        // 邮件发送
+        mailService.sendEmail(student, modification);
+        if (state.equals("上传成功"))
+            view.addObject("message", "提交成功");
+        else
+            view.addObject("message", "提交失败");
+
+        return view;
     }
 
-    @RequestMapping(value = "/teacherVersionDownloadStudent/{id}",method = RequestMethod.GET)
-    public String teacherVersionDownloadStudent(@PathVariable("id")int id, Model model, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        modificationService.download(request, response,modificationService.getModificationById(id),1);
-        return "redirect:/paperUpload";
+    @RequestMapping(value = "/paperDownloadStudent/{id}", method = RequestMethod.GET)
+    public void paperDownloadStudent(@PathVariable("id") int id, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        modification modification = modificationService.getModificationById(id);
+        modificationService.download(request, response, modificationService.getModificationById(modification.getId()), 0);
+    }
+
+    @RequestMapping(value = "/teacherVersionDownloadStudent/{id}", method = RequestMethod.GET)
+    public void teacherVersionDownloadStudent(@PathVariable("id") int id, Model model, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        modificationService.download(request, response, modificationService.getModificationById(id), 1);
     }
 
 

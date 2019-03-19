@@ -115,6 +115,8 @@ public class modificationServiceImpl implements modificationService {
                         os.write(buffer, 0, i);
                         i = bis.read(buffer);
                     }
+                    os.flush();
+                    os.close();
                     return "success";
                 } catch (Exception e) {
                     e.printStackTrace();

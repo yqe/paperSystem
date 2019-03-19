@@ -57,15 +57,15 @@
                         </div>
                         <div class="col-md-6">
                             <br/>
-                            <h5>你好! [[${teacher.name}]]</h5>
+                            <h5>你好! [[${student.studentName}]]</h5>
                         </div>
                     </div>
                 </li>
                 <li>
-                    <a  class="active-menu" th:href="@{/checkStudent}"><i class="fa fa-dashboard "></i>在读学生列表</a>
+                    <a class="active-menu" th:href="@{/paperUpload}"><i class="fa fa-dashboard "></i>论文管理</a>
                 </li>
                 <li>
-                    <a  th:href="@{/checkGraduatedStudent}"><i class="fa fa-dashboard "></i>历史学生列表</a>
+                    <a th:href="@{/studentInfo}"><i class="fa fa-dashboard "></i>个人信息管理</a>
                 </li>
             </ul>
         </div>
@@ -77,9 +77,10 @@
                 <div class="col-md-12">
                     <a class="btn btn-danger" th:href="@{/index}"
                        style="float: right">退出</a>
-                    <a th:href="'/paperInfo/'+${studentEmail}" class="btn btn-primary" style="float: right;margin-right: 10px;">返回</a>
-                    <h1 class="page-head-line">论文提交</h1>
-                    <form class="form-horizontal" th:action="@{/reviseUpload}" ENCTYPE="multipart/form-data" method="post">
+                    <a class="btn btn-primary" th:href="@{/paperUpload}"
+                       style="margin-right:15px;float: right">返回</a>
+                    <h1 class="page-head-line">论文重传</h1>
+                    <form class="form-horizontal" th:action="@{/paperReModification}" ENCTYPE="multipart/form-data" method="post">
                         <div class="row">
                             <div class="form-group">
                                 <div class="formRow">
@@ -95,11 +96,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <input type="hidden" class="form-control" name="id" id="id" th:value="${id}"/>
+                            <input type="hidden" name="modificationId" th:value="${modification.id}"/>
                             <div class="form-group">
                                 <div class="formRow">
-                                    <label for="advice">修改意见</label>
-                                    <textarea class="form-control" rows="3" name="advice" id="advice" >[[${modification.teacherAdvice}]]</textarea>
+                                    <label for="summary">修改概要</label>
+                                    <input type="text" class="form-control" name="summary" id="summary" th:value="${modification.summary}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="formRow">
+                                    <label for="description">具体说明</label>
+                                    <textarea class="form-control" rows="5" name="description" id="description">[[${modification.description}]]</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -124,17 +131,25 @@
 <!-- JQUERY SCRIPTS -->
 <script src="/js/jquery-1.10.2.js"></script>
 <!-- BOOTSTRAP SCRIPTS -->
-<script src="/js/bootstrap.js"></script>
+<!--<script src="/js/bootstrap.js"></script>-->
 <!-- PAGE LEVEL SCRIPTS -->
 <script src="/js/bootstrap-fileupload.js"></script>
 <!-- METISMENU SCRIPTS -->
 <script src="/js/jquery.metisMenu.js"></script>
 <!-- CUSTOM SCRIPTS -->
-<script src="/js/custom.js"></script>
+<!--<script src="/js/custom.js"></script>-->
 <!--<script src="/js/easyui.js"></script>-->
 <script src="/js/jquery-latest.js"></script>
-
 <script th:src="@{/js/sweetalert.min.js}"></script>
+<script th:inline="javascript">
+    var state = [[${state}]];
+    if(state!=null){
+        swal({
+            title : "温馨提示",
+            text : state
+        });
+    }
+</script>
 
 <script  th:inline="javascript">
     var warning = [[${warning}]];
@@ -145,7 +160,6 @@
         });
     }
 </script>
-
 
 </body>
 </html>

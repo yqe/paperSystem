@@ -126,7 +126,18 @@
                                     <span class="year">[[${modification.date}]]</span>
 								</span>
                                 <h2 class="title">[[${modification.summary}]]</h2>
-                                <p class="description"><a class="btn btn-success" th:href="'/paperDownloadStudent/'+${modification.id}">历史版本下载</a></p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="description">
+                                        <a class="btn btn-success" th:href="'/paperDownloadStudent/'+${modification.id}">历史版本下载</a>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="description">
+                                            <a class="btn btn-primary" th:href="'/paperReUpload/'+${modification.id}">重新上传</a>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="adivce-content">
                                 <div th:if="${modification.teacherAdvice==null}"  class="upload"><a class="btn btn-primary btn-lg disabled" role="button">修改论文</a></div>
