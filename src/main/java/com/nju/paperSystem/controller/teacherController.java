@@ -162,19 +162,21 @@ public class teacherController {
     public ModelAndView reviseUpload(@RequestParam("file") MultipartFile file, Model model, HttpServletRequest request) throws IOException, MessagingException {
         int id = Integer.valueOf(request.getParameter("id"));
         String studentEmail = modificationService.getModificationById(id).getStudentEmail();
-        ModelAndView view = new ModelAndView("redirect:paperRevise/"+id);
-        if(file.isEmpty()){
-            view.addObject("warning","请选择上传文件");
-            return view;
-        }
+        ModelAndView view = new ModelAndView("redirect:paperInfo/"+studentEmail);
         student student = studentService.getStudentByEmail(studentEmail);
         modification modification = modificationService.getModificationById(id);
         //更新教师意见和修改的论文
         modification.setTeacherAdvice(request.getParameter("advice"));
+        if(file.isEmpty()){
+            modification.setTeacherFileName(null);
+            modificationService.update(modification);
+            mailService.sendReviseEmail(student, modification);
+            view.addObject("message","提交成功");
+            return view;
+        }
         String state = modificationService.upload(file, student, modification,1);
         mailService.sendReviseEmail(student, modification);
 
-         view = new ModelAndView("redirect:paperInfo/"+studentEmail);
         if(state.equals("上传成功"))
             view.addObject("message","提交成功");
         else

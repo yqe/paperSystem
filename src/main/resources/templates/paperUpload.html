@@ -140,9 +140,14 @@
                                 </div>
                             </div>
                             <div class="adivce-content">
-                                <div th:if="${modification.teacherAdvice==null}"  class="upload"><a class="btn btn-primary btn-lg disabled" role="button">修改论文</a></div>
-                                <div th:if="${modification.teacherAdvice!=null}"><h2 class="advice">[[${modification.teacherAdvice}]]</h2>
-                                    <p class="adviceDescription"><a class="btn btn-success" th:href="'/teacherVersionDownloadStudent/'+${modification.id}">教师版本下载</a></p>
+                                <div th:if="${modification.teacherAdvice==null}"  class="upload">
+                                    <a class="btn btn-primary btn-lg disabled" role="button">修改论文</a>
+                                </div>
+                                <div th:if="${modification.teacherAdvice!=null}">
+                                    <h2 class="advice">[[${modification.teacherAdvice}]]</h2>
+                                    <div th:if="${modification.teacherFileName!=null}">
+                                        <p class="adviceDescription"><a class="btn btn-success" th:href="'/teacherVersionDownloadStudent/'+${modification.id}">教师版本下载</a></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

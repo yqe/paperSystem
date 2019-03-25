@@ -24,11 +24,11 @@ public class mailServiceImpl implements mailService {
         email teacheremail = new email();
         //给学生发送邮件提醒
         studentemail.setReceiver(student.getStudentEmail());
-        studentemail.setContent(modification.getSummary()+"\n"+"\n"+modification.getDescription());
+        studentemail.setContent(modification.getSummary()+"<br>"+modification.getDescription());
         studentemail.setSubject(student.getStudentName()+"-版本"+modification.getVersion()+"-"+modification.getDate()+"-学位论文");
         //给老师发送邮件提醒
         teacheremail.setReceiver(student.getTeacherEmail());
-        teacheremail.setContent(modification.getSummary()+"\n"+"\n"+modification.getDescription());
+        teacheremail.setContent(modification.getSummary()+"<br>"+modification.getDescription());
         teacheremail.setSubject(student.getStudentName()+"-版本"+modification.getVersion()+"-"+modification.getDate()+"-学位论文");
         mc.sendMail(studentemail, student.getStudentEmail(), modification.getFileName());
         mc.sendMail(teacheremail, student.getStudentEmail(), modification.getFileName());
@@ -43,7 +43,7 @@ public class mailServiceImpl implements mailService {
 //        email teacheremail = new email();
         //给学生发送邮件提醒
         studentemail.setReceiver(student.getStudentEmail());
-        studentemail.setContent(modification.getSummary()+"\n"+"\n"+modification.getTeacherAdvice());
+        studentemail.setContent(modification.getSummary()+"<br>"+modification.getTeacherAdvice());
         studentemail.setSubject(student.getStudentName()+"-版本"+modification.getVersion()+"-"+modification.getDate()+"-论文批注");
         mc.sendMail(studentemail, student.getStudentEmail(), modification.getTeacherFileName());
 //        mc.sendMail(teacheremail, student.getStudentEmail(), fileName);
